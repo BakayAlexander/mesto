@@ -1,0 +1,6 @@
+.profile {
+    max-width: calc(100% - 200*2px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
