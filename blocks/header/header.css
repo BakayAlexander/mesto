@@ -1,0 +1,5 @@
+.header {
+    max-width: calc(100% - 200*2px);
+    display: flex;
+    flex-direction: column;
+}
