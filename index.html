@@ -13,22 +13,77 @@
     <div class="page__container-global">
       <section class="header page__container-header">
         <img class="header__logo" src="./images/logo.svg" alt="Логотип проекта" />
-        <img class="header__line" src="./images/line.svg" alt="Простая линия" />
+        <div class="header__line"></div>
       </section>
       <section class="profile page__container-profile">
         <div class="profile__container">
           <img src="./images/kusto.jpg" alt="Фото профиля" class="profile__pic">
           <div class="profile__info">
             <h1 class="profile__name">Жак-Ив Кусто</h1>
-            <img src="./images/edit_button.svg" alt="Кнопка редактирования" class="profile__edit-button">
+            <button class="profile__edit-button"><div class="profile__edit-pic"></div></button>
             <p class="profile__description">Исследователь океана</p>
           </div>
       </div>
-        <img src="./images/add_button.png" alt="Кнопка добавления" class="profile__add-button">
+        <button class="profile__add-button"><div class="profile__add-pic"></div></button>
       </section>
       <section class="elements page__container-elements">
-        <article class="element"></article>
+        <article class="element">
+          <img src="./images/element_1.jpg" alt="Фотография добавленная пользователем" class="element__pic">
+          <div class="element__container">
+            <p class="element__name">Карачаевск</p>
+            <button class="element__like-button"></button>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/element_2.jpg" alt="Фотография добавленная пользователем" class="element__pic">
+          <div class="element__container">
+            <p class="element__name">Гора Эльбрус</p>
+            <button class="element__like-button"></button>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/element_3.jpg" alt="Фотография добавленная пользователем" class="element__pic">
+          <div class="element__container">
+            <p class="element__name">Домбай</p>
+            <button class="element__like-button"></button>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/element_4.jpg" alt="Фотография добавленная пользователем" class="element__pic">
+          <div class="element__container">
+            <p class="element__name">Гора Эльбрус</p>
+            <button class="element__like-button"></button>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/element_5.jpg" alt="Фотография добавленная пользователем" class="element__pic">
+          <div class="element__container">
+            <p class="element__name">Домбай</p>
+            <button class="element__like-button"></button>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/element_6.jpg" alt="Фотография добавленная пользователем" class="element__pic">
+          <div class="element__container">
+            <p class="element__name">Карачаево-Чeркессия</p>
+            <button class="element__like-button"></button>
+          </div>
+        </article>
       </section>
+      <section class="footer page__container-footer">
+        <p class="footer__content">&copy; 2021 Mesto Russia</p>
+      </section>
+      <!-- <form action="" class="popup">
+        <div class="popup__container">
+          <p class="popup__title">Редактировать профиль</p>
+          <fieldset class="popup__inputs">
+            <input  class="popup__name" type="text" name="fullname" value="Жак-Ив Кусто">
+            <input  class="popup__description" type="text" name="description" value="Исследователь океана">
+          </fieldset>
+          <button class="popup__button-save" type="submit">Сохранить</button>
+          <button class="popup__button-close" type="submit"></button>
+        </div>
+      </form> -->
     </div>
   </body>
 </html>

@@ -1,0 +1,12 @@
+.popup__inputs {
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 54px 0 0 30px;
+}
+
+@media screen and (max-width: 800px) {
+    .popup__inputs {
+        padding: 75px 0 0 22px;      
+    } 
+}

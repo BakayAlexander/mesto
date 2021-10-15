@@ -3,4 +3,22 @@
     line-height: 48px;
     font-weight: 500;
     margin: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 1024px) {
+    .profile__name {
+        font-size: 32px;
+        line-height: 40px;
+    } 
+}
+
+@media screen and (max-width: 605px) {
+    .profile__name {
+        font-size: 27px;
+        line-height: 33px;
+        margin-top: 22px;
+    } 
 }

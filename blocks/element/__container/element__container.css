@@ -1,0 +1,8 @@
+.element__container {
+    max-width: 246px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+}
