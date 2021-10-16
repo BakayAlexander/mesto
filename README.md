@@ -14,4 +14,4 @@
 Необходимо сделать адаптив более пригодным 
 
 **Ссылка на GitHub Pages**
-Мой сайт размещен по ссылке https://bakayalexander.github.io/russian-travel/
+Мой сайт размещен по ссылке https://bakayalexander.github.io/mesto/
