@@ -19,12 +19,14 @@
         <div class="profile__container">
           <img src="./images/kusto.jpg" alt="Фото профиля" class="profile__pic">
           <div class="profile__info">
-            <h1 class="profile__name">Жак-Ив Кусто</h1>
-            <button class="profile__edit-button"><div class="profile__edit-pic"></div></button>
+            <div class="profile__name-container">
+              <h1 class="profile__name">Жак-Ив Кусто</h1>
+              <button class="profile__edit-button" type="button"><div class="profile__edit-pic"></div></button>
+            </div>
             <p class="profile__description">Исследователь океана</p>
           </div>
       </div>
-        <button class="profile__add-button"><div class="profile__add-pic"></div></button>
+        <button class="profile__add-button" type="button"><div class="profile__add-pic"></div></button>
       </section>
       <section class="elements page__container-elements">
         <article class="element">
@@ -73,17 +75,18 @@
       <section class="footer page__container-footer">
         <p class="footer__content">&copy; 2021 Mesto Russia</p>
       </section>
-      <!-- <form action="" class="popup">
-        <div class="popup__container">
+      <section class="popup">
+        <form class="popup__container">
           <p class="popup__title">Редактировать профиль</p>
           <fieldset class="popup__inputs">
-            <input  class="popup__name" type="text" name="fullname" value="Жак-Ив Кусто">
-            <input  class="popup__description" type="text" name="description" value="Исследователь океана">
+            <input  class="popup__name" type="text" name="fullname" value="">
+            <input  class="popup__description" type="text" name="description" value="">
           </fieldset>
           <button class="popup__button-save" type="submit">Сохранить</button>
-          <button class="popup__button-close" type="submit"></button>
-        </div>
-      </form> -->
+          <button class="popup__button-close" type="button"></button>
+        </form>
+      </section>
     </div>
+    <script src="./scripts/index.js"></script>
   </body>
 </html>

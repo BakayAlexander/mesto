@@ -1,15 +1,16 @@
 .profile__info {
-    max-width: 336px;
+    max-width: 450px;
     display: flex;
-    flex-wrap: wrap;
     align-items: baseline;
     padding-left: 30px;
-    /* position: relative; */
+    flex-direction: column;
 }
 
 @media screen and (max-width: 605px) {
     .profile__info {
         justify-content: center;
+        align-items: center;
         padding: 0;
+        padding-top: 22px;
     } 
 }
