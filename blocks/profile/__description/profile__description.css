@@ -5,14 +5,14 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: 80%;
+    max-width: 95%;
 }
 
 @media screen and (max-width: 605px) {
     .profile__description {
         font-size: 14px;
         line-height: 17px;
-        margin: 14px 0 0 0;
+        margin: 8px 0 0 0;
         max-width: 280px;
     } 
 }
