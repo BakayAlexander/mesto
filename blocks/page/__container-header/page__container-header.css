@@ -2,11 +2,8 @@
     margin: 45px auto 0 auto;
 }
 
-/* Анна, а я не мог понять, да что не так. Большое спасибо, что прислали указатель в фигме. */
-
 @media screen and (max-width: 605px) {
     .page__container-header {
         margin-top: 28px;
-
     } 
 }

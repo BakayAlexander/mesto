@@ -1,7 +1,6 @@
 .profile__container {
     display: flex;
     align-items: center;
-    /* width: 880px; */
     max-width: 70%;
 }
 
