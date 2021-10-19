@@ -12,7 +12,7 @@ const popupOpenButtonElement = document.querySelector('.profile__edit-button');
 
 //ФОРМА. Объявление переменных и выборки
 //Выборка формы
-let formElement = popupElement.querySelector('.popup__container');
+let formElement = popupElement.querySelector('.popup__form-edit');
 
 //Выборка текстовых элементов
 let nameElement = document.querySelector('.profile__name');
