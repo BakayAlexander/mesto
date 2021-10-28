@@ -1,5 +1,5 @@
-.popup {
-    /* position: fixed;
+.popup_type_edit {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -7,5 +7,5 @@
     background-color: rgba(0, 0, 0, 0.5);
     display: none;
     justify-content: center;
-    align-items: center; */
+    align-items: center;
 }

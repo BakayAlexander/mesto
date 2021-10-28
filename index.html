@@ -29,7 +29,7 @@
           <button class="profile__add-button" type="button" aria-label="Добавить"><img src="./images/add_button.svg" alt="Кнопка Добавления" class="profile__add-pic"> </button>
         </section>
         <section class="elements page__container-elements">
-          <article class="element">
+          <!-- <article class="element">
             <img src="./images/element_1.jpg" alt="Фотография добавленная пользователем" class="element__pic">
             <div class="element__container">
               <h2 class="element__name">Карачаевск</h2>
@@ -70,13 +70,13 @@
               <h2 class="element__name">Карачаево-Чeркессия</h2>
               <button class="element__like-button" type="button" aria-label="Отметить понравившимся"></button>
             </div>
-          </article>
+          </article> -->
         </section>
       </main>
       <footer class="footer page__container-footer">
         <p class="footer__content">&copy; 2021 Mesto Russia</p>
       </footer>
-      <div class="popup">
+      <div class="popup popup_type_edit">
         <div class="popup__container">
           <h2 class="popup__title">Редактировать профиль</h2>
           <form name="form-edit" class="popup__form-edit">
@@ -89,7 +89,28 @@
           <button class="popup__button-close" type="button" aria-label="Закрыть"></button>
         </div>
       </div>
+      <div class="popup popup_type_card">
+        <div class="popup__container">
+          <h2 class="popup__title">Новое место</h2>
+          <form name="form-edit" class="popup__form-edit">
+            <fieldset class="popup__inputs">
+              <input  class="popup__input popup__input_type_name" type="text" name="fullname" value="" placeholder="Название">
+              <input  class="popup__input popup__input_type_description" type="text" name="description" value="" placeholder="Ссылка на картинку">
+            </fieldset>
+            <button class="popup__button-save" type="submit">Создать</button>
+          </form>
+          <button class="popup__button-close" type="button" aria-label="Закрыть"></button>
+        </div>
+      </div>
     </div>
+    <template id="element-template">
+      <article class="element">
+        <img class="element__pic" src="" alt="Фотография добавленная пользователем" >
+        <div class="element__container">
+          <h2 class="element__name"></h2>
+          <button class="element__like-button" type="button" aria-label="Отметить понравившимся"></button>
+        </div>
+    </template>
     <script src="./scripts/index.js"></script>
   </body>
 </html>
