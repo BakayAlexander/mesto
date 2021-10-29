@@ -70,6 +70,8 @@ popupElement.addEventListener('click', closePopupByClickOverlay);
 //Событие 'Клик по кнопке Сохранить'
 formElement.addEventListener('submit', formSubmitHandler);
 
+
+
 //5й спринт.----------------------------------------------------------------
 
 //Добавление defaul-карточек(из коробки)
@@ -90,13 +92,13 @@ const addCard = (name, image) => {
   //прописать слушатели на удалениe like и превью
   elementCard.querySelector('.element__like-button').addEventListener('click', function(evt){
     const eventTarget = evt.target;
-    //add работает, а вот toggle не работает
+    //add работает, а вот toggle не работает при объявлении глобальных перменных
     eventTarget.classList.toggle('element__like-button_acive')
   })
   elementSection.prepend(elementCard);
 };
 
-
+//Test commit
 
 // addCard("Jane", "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg");
 
