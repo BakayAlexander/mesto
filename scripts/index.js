@@ -98,8 +98,6 @@ const addCard = (name, image) => {
   elementSection.prepend(elementCard);
 };
 
-//Test commit
-
 // addCard("Jane", "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg");
 
 //Реализуем добавление default карточек
@@ -154,6 +152,6 @@ popupOpenButtonCard.addEventListener('click', togglePopup)
 
 
 
-
+//Test commit
 
 
