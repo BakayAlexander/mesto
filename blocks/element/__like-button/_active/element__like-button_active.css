@@ -1,0 +1,8 @@
+.element__like-button_acive {
+    background-image: url(../../../../images/element_like_active.svg);
+    opacity: 1;
+}
+
+.element__like-button:hover {
+    opacity: 0.5;
+}

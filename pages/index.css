@@ -29,6 +29,7 @@
 @import url("../blocks/element/__container/element__container.css");
 @import url("../blocks/element/__name/element__name.css");
 @import url("../blocks/element/__like-button/element__like-button.css");
+@import url("../blocks/element/__like-button/_active/element__like-button_active.css");
 
 @import url("../blocks/footer/footer.css");
 @import url("../blocks/footer/__content/footer__content.css");
