@@ -3,6 +3,7 @@
 
 const popupElement = document.querySelector('.popup');
 
+//Выборка формы редактиврования профиля
 const popupFormEdit = document.querySelector('.popup_type_edit');
 //Выборка кнопки закрытия
 const popupCloseButtonElement = document.querySelector('.popup__button-close');
@@ -23,15 +24,15 @@ let descriptionInput = formProfile.querySelector('.popup__input_type_description
 
 //Функции
 //Функция открытия popup
-// const openPopup = () => {
-//   popupElement.classList.add('popup_is-opened');
-// };
-
 const openPopup = (element) => {
+  //переменной element будет присвоен класс открытия popup
   element.classList.add('popup_is-opened');
 };
 
-
+//Функция закрытия popup
+const closePopup = (element) => {
+  element.classList.remove('popup_is-opened');
+};
 
 //Функция заполнения popup (для формы редактирования профиля)
 const fillPopup = () => {
@@ -39,10 +40,6 @@ const fillPopup = () => {
   descriptionInput.value = descriptionElement.textContent;
 }
 
-//Функция закрытия popup
-const closePopup = () => {
-  popupElement.classList.remove('popup_is-opened');
-};
 
 //Функция закрытия popup при клике на пустую область
 const closePopupByClickOverlay = function (event) {
@@ -52,8 +49,10 @@ const closePopupByClickOverlay = function (event) {
   closePopup();
 };
 
+
 //Функция заполнения формы по кнопке "Сохранить"
 function formSubmitHandler(evt) {
+  //отменяет дефолтное поведение. Страница не перезагружается после отправки формы
   evt.preventDefault();
   //Вытаскиваем текущие значения input
   let nameInputValue = nameInput.value;
@@ -61,32 +60,33 @@ function formSubmitHandler(evt) {
   //Вставляем текущие значения input в textContent html элементов
   nameElement.textContent = nameInputValue;
   descriptionElement.textContent = descriptionInputValue;
-  closePopup();
+  //Закрываем форму. Вызываем функцию и на вход передаем элемент, которому будет добавлен еще один класс
+  closePopup(popupFormEdit);
 }
 
 //События
 //Событие 'Открытие popup'
 // popupOpenButtonElement.addEventListener('click', openPopup);
-popupOpenButtonElement.addEventListener('click', function(evt){
+popupOpenButtonElement.addEventListener('click', function(){
   openPopup(popupFormEdit);
-  fillPopup(evt);
+  fillPopup();
 });
 
-
 //Событие 'Закрытие popup'
-popupCloseButtonElement.addEventListener('click', closePopup);
-
-//Событие 'Закрытие popup при клике на пустую область'
-popupElement.addEventListener('click', closePopupByClickOverlay);
+popupCloseButtonElement.addEventListener('click', function(){
+  closePopup(popupFormEdit);
+});
 
 //Событие 'Клик по кнопке Сохранить'
 formProfile.addEventListener('submit', formSubmitHandler);
 
+//Событие 'Закрытие popup при клике на пустую область'
+popupElement.addEventListener('click', closePopupByClickOverlay);
+
+
 
 
 //5й спринт.----------------------------------------------------------------
-
-//Добавление defaul-карточек(из коробки)
 
 //Достаем секцию element
 const elementSection = document.querySelector('.elements');
@@ -95,16 +95,14 @@ const elemetTemplate = document.querySelector('.element-template').content;
 
 //Функция наполнения карточки
 function addCard (name, image) {
-  //Достаем и копируем всю заготовку карточки
+  //Достаем и копируем всю заготовку карточки. Делаем локально, поскольку если глобально, цикл будет прогонять ее как новую при каждой итерации.
   const elementCard = elemetTemplate.querySelector('.element').cloneNode(true);
-
   //Вводим текст и картинку  
   elementCard.querySelector('.element__name').textContent = name;
   elementCard.querySelector('.element__pic').src = image;
   //Запускаем слушатели на события внутри карточек
   setListeners(elementCard);
-  //Добавляем карточки
-  // elementSection.prepend(elementCard);
+  //Результатом действия функции будет возврат заполненной карточки elementCard(.element)
   return elementCard
 };
 
@@ -159,44 +157,50 @@ const initialCards = [
 //Функция добавления карточек из массива
 function renderCard () {
     initialCards.forEach((item) => {
+      //Обозначаем переменную с произвольным названием и в нее записываем 
+      //функцию с входящими параметрами, которые вытаскиеваем из массива 
+      //обращением через точку. item - каждый элемент массива
       const elCard = addCard(item.name, item.image)
+      //Добавляем эту переменную в секцию карточек
       elementSection.prepend(elCard);
     })
 }
-
+//Запускаем дефолтное заполнение карточками.
 renderCard()
 
 //Форма Card
-//Выборка формы и кнопки
+//Выборка формы и кнопок с ней связанных
 const popupFormCard = document.querySelector('.popup_type_card');
-const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-close')
 const popupFormCardOpenElement = document.querySelector('.profile__add-button')
+const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-close')
 const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-save');
 
-//Слушатель и открытие формы!! НАДО ПЕРЕПИСАТЬ В СОКРАЩЕННЫЙ ВАРИАНТ
+//Слушатель и открытие формы
 popupFormCardOpenElement.addEventListener('click', function(){
-  // popupFormCard.classList.add('popup_is-opened')
   openPopup(popupFormCard);
 })
 
-//Слушатель и закрытие формы!! НАДО ПЕРЕПИСАТЬ В СОКРАЩЕННЫЙ ВАРИАНТ
-popupFormCardCloseElement.addEventListener('click', function(evt){
-  popupFormCard.classList.remove('popup_is-opened')
+//Слушатель и закрытие формы
+popupFormCardCloseElement.addEventListener('click', function(){
+  closePopup(popupFormCard);
 });
 
 //Слушать на событие "Создать"
 popupFormCardSaveElement.addEventListener('click', function(evt){
   evt.preventDefault();
+  //Достаем значения инпутов внутри функции
   const image = popupFormCard.querySelector('.popup__input_type_description');
   const name = popupFormCard.querySelector('.popup__input_type_name');
+  //Создаем переменную внутрь которой передаем функцию с входными параметрами значений(value) инпутов
   const elCard = addCard(name.value, image.value);
+  //Добавляем переменную в контейнер section
   elementSection.prepend(elCard);
-  //дописать функцию закрытия popup
+  //Обнуляем значения инпутов, дабы при открытии они не сохранялись
   name.value = '';
   image.value = '';
+  //Закрываем форму после нажатия кнопки (Создать)
+  closePopup(popupFormCard);
 })
-
-
 
 
 
