@@ -98,7 +98,7 @@ const addCard = (name, image) => {
   elementSection.prepend(elementCard);
 };
 
-
+//Test commit
 
 // addCard("Jane", "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg");
 
