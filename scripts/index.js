@@ -96,15 +96,23 @@ const addCard = (name, image) => {
 
 //Слушатели событий на элементы внутри карточки
 function setListeners(element) {
+  //слушатель на кнопку like
   element.querySelector('.element__like-button').addEventListener('click', handleLike)
+  //слушатель на кнопку delete
+  element.querySelector('.element__delete-button').addEventListener('click', handleCardDelete)
 }
 
 //Функция добавления лайка
-function handleLike (evt){
+function handleLike(evt){
   evt.target.classList.toggle('element__like-button_acive');
   //Более длинная запись с объявлением переменной и навешиванием непосредственно на нее переключателя
   // const eventTarget = evt.target;
   // eventTarget.classList.toggle('element__like-button_acive');
+}
+
+//Функция удаления карточки. Прописываем через closest чтобы удалять конкретную карточку
+function handleCardDelete(evt){
+  evt.target.closest('.element').remove();
 }
 
 //Массив default карточек
