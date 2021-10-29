@@ -79,7 +79,7 @@ formElement.addEventListener('submit', formSubmitHandler);
 //Достаем секцию element
 const elementSection = document.querySelector('.elements');
 //Достаем template
-const elemetTemplate = document.querySelector('#element-template').content;
+const elemetTemplate = document.querySelector('.element-template').content;
 
 //Функция наполнения карточки
 const addCard = (name, image) => {
@@ -151,7 +151,5 @@ const togglePopup = function (evt) {
 popupOpenButtonCard.addEventListener('click', togglePopup)
 
 
-
-//Test commit
 
 
