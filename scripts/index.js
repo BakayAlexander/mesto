@@ -85,22 +85,37 @@ const elemetTemplate = document.querySelector('.element-template').content;
 const addCard = (name, image) => {
   //Достаем и копируем всю заготовку карточки
   const elementCard = elemetTemplate.querySelector('.element').cloneNode(true);
-    
+  //Вводим текст и картинку  
   elementCard.querySelector('.element__name').textContent = name;
   elementCard.querySelector('.element__pic').src = image;
-  
-  //прописать слушатели на удалениe like и превью
-  elementCard.querySelector('.element__like-button').addEventListener('click', function(evt){
-    const eventTarget = evt.target;
-    //add работает, а вот toggle не работает при объявлении глобальных перменных
-    eventTarget.classList.toggle('element__like-button_acive')
-  })
+  //Запускаем слушатели на события внутри карточек
+  setListeners(elementCard);
+  //Добавляем карточки
   elementSection.prepend(elementCard);
 };
 
-// addCard("Jane", "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg");
+//Слушатели событий на элементы внутри карточки
+function setListeners(element) {
+  //слушатель на кнопку like
+  element.querySelector('.element__like-button').addEventListener('click', handleLike)
+  //слушатель на кнопку delete
+  element.querySelector('.element__delete-button').addEventListener('click', handleCardDelete)
+}
 
-//Реализуем добавление default карточек
+//Функция добавления лайка
+function handleLike(evt){
+  evt.target.classList.toggle('element__like-button_acive');
+  //Более длинная запись с объявлением переменной и навешиванием непосредственно на нее переключателя
+  // const eventTarget = evt.target;
+  // eventTarget.classList.toggle('element__like-button_acive');
+}
+
+//Функция удаления карточки. Прописываем через closest чтобы удалять конкретную карточку
+function handleCardDelete(evt){
+  evt.target.closest('.element').remove();
+}
+
+//Массив default карточек
 const initialCards = [
   {
     name: 'Архыз',
