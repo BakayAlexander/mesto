@@ -25,7 +25,7 @@ const descriptionInput = formProfile.querySelector('.popup__input_type_descripti
 //Функции
 //Функция открытия popup
 const openPopup = (element) => {
-  //переменной element будет присвоен класс открытия popup
+  //переменной element будет присвоен класс открытия popup, он меняет visibility
   element.classList.add('popup_is-opened');
 };
 
@@ -44,17 +44,12 @@ const fillPopup = () => {
 //Функция закрытия popup при клике на пустую область
 //хочу передавать element внутрь closePopup но хз как
 // const closePopupByClickOverlay = function (event) {
-//   if (event.target !== event.currentTarget) {
-//     return;
+//   console.log(`event.target`, event.target)
+//   console.log(`popupElement`, popupElement)
+//   if (event.target === popupElement) {
+//     closePopup(popupElement);
 //   }
-//   closePopup();
 // };
-const closePopupByClickOverlay = function (evt) {
-  if (evt.target === evt.currentTarget) {
-    closePopup();
-  }
-};
-
 
 //Функция заполнения формы по кнопке "Сохранить"
 function formSubmitHandler(evt) {
@@ -87,7 +82,7 @@ popupCloseButtonFormProfile.addEventListener('click', function(){
 formProfile.addEventListener('submit', formSubmitHandler);
 
 //Событие 'Закрытие popup при клике на пустую область'
-popupFormProfile.addEventListener('click', closePopupByClickOverlay);
+// popupFormProfile.addEventListener('click', closePopupByClickOverlay);
 
 
 
@@ -137,15 +132,20 @@ function addCard (name, image) {
   //Запускаем слушатели на события внутри карточек
   setListeners(elementCard);
   //Результатом действия функции будет возврат заполненной карточки elementCard(.element)
-  return elementCard
+  return elementCard;
 };
+
 
 //Слушатели событий на элементы внутри карточки
 function setListeners(element) {
   //слушатель на кнопку like
-  element.querySelector('.element__like-button').addEventListener('click', handleLike)
+  element.querySelector('.element__like-button').addEventListener('click', handleLike);
   //слушатель на кнопку delete
-  element.querySelector('.element__delete-button').addEventListener('click', handleCardDelete)
+  element.querySelector('.element__delete-button').addEventListener('click', handleCardDelete);
+  //слушатель на картинку.! В addEventListener нельзя вызывать функцию, на нее можно только сослаться. т.е. написать  handlePopupPic(element) после click нельзя
+  element.addEventListener('click', function() {
+    handlePopupPic(element)
+  });
 }
 
 //Функция добавления лайка
@@ -166,7 +166,7 @@ function renderCard () {
       //Обозначаем переменную с произвольным названием и в нее записываем 
       //функцию с входящими параметрами, которые вытаскиеваем из массива 
       //обращением через точку. item - каждый элемент массива
-      const elCard = addCard(item.name, item.image)
+      const elCard = addCard(item.name, item.image);
       //Добавляем эту переменную в секцию карточек
       elementSection.prepend(elCard);
       //Также ее можно записать так:
@@ -174,13 +174,13 @@ function renderCard () {
     })
 }
 //Запускаем дефолтное заполнение карточками.
-renderCard()
+renderCard();
 
 //Popup форма Card
 //Выборка формы и кнопок с ней связанных
 const popupFormCard = document.querySelector('.popup_type_card');
-const popupFormCardOpenElement = document.querySelector('.profile__add-button')
-const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-close')
+const popupFormCardOpenElement = document.querySelector('.profile__add-button');
+const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-close');
 const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-save');
 
 //Слушатель и открытие формы
@@ -210,19 +210,27 @@ popupFormCardSaveElement.addEventListener('click', function(evt){
   closePopup(popupFormCard);
 })
 
-//Popup  с картинкой
-const popupPic = document.querySelector('.popup_type_pic');
-//1) Достать картинку из заполненной секции 2) Присвоить ей класс с абсолютом 3) Настроить слушатель события
-//Достаем картинку из секции, ведь она у нас уже заполнена
-const templatePic = elementSection.querySelector('.element__pic');
-//Слушатель события клика по картинке
-templatePic.addEventListener('click', function(){
-  openPopup(popupPic);
-  //дописать присвоение названия картинки
-})
-//Достаем кнопку закрытия этого  popup
-const popupCloseButtonPic = popupPic.querySelector('.popup__button-close')
-//Вешаем на кнопку слушатель
-popupCloseButtonPic.addEventListener('click', function(){
-  closePopup(popupPic);
-})
+
+
+// //Popup  с картинкой
+
+const popupAllPic = document.querySelector('.popup_type_pic')
+const popupPicCardCloseButton = popupAllPic.querySelector('.popup__button-close');
+
+function handlePopupPic(element) {
+  openPopup(popupAllPic)
+  const elementPic = element.querySelector('.element__pic');
+  const elementTitle = element.querySelector('.element__name');
+
+  const picTitle = popupAllPic.querySelector('.popup__title-pic');
+  const popupElementPic = popupAllPic.querySelector('.popup__pic')
+
+  picTitle.textContent = elementTitle.textContent;
+  popupElementPic.src = elementPic.src
+}
+
+//Слушатель и закрытие карточки
+popupPicCardCloseButton.addEventListener('click', function(){
+  closePopup(popupAllPic);
+});
+
