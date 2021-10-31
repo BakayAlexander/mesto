@@ -42,7 +42,7 @@ const fillPopup = () => {
 
 
 //Функция закрытия popup при клике на пустую область
-//хочу передавать element внутрь closePopup но хз как
+//хочу передавать element внутрь closePopup, но пока не могу реализовать
 // const closePopupByClickOverlay = function (event) {
 //   console.log(`event.target`, event.target)
 //   console.log(`popupElement`, popupElement)
@@ -123,7 +123,7 @@ const elementSection = document.querySelector('.elements');
 const elementTemplate = document.querySelector('.element-template').content;
 
 //Функция наполнения карточки
-function addCard (name, image) {
+function createCard (name, image) {
   //Достаем и копируем всю заготовку карточки. Делаем локально, поскольку если глобально, цикл будет прогонять ее как новую при каждой итерации.
   let elementCard = elementTemplate.querySelector('.element').cloneNode(true);
   //Вводим текст и картинку  
@@ -142,8 +142,11 @@ function setListeners(element) {
   element.querySelector('.element__like-button').addEventListener('click', handleLike);
   //слушатель на кнопку delete
   element.querySelector('.element__delete-button').addEventListener('click', handleCardDelete);
+  //Реализуем открытие popup с картинкой. Необходимо вытащить саму картинку, и на нее уже повесить клик.
+  //из каждого приходящего element мы достаем картинку
+  const elementPic = element.querySelector('.element__pic')
   //слушатель на картинку.! В addEventListener нельзя вызывать функцию, на нее можно только сослаться. т.е. написать  handlePopupPic(element) после click нельзя
-  element.addEventListener('click', function() {
+  elementPic.addEventListener('click', function() {
     handlePopupPic(element)
   });
 }
@@ -166,11 +169,11 @@ function renderCard () {
       //Обозначаем переменную с произвольным названием и в нее записываем 
       //функцию с входящими параметрами, которые вытаскиеваем из массива 
       //обращением через точку. item - каждый элемент массива
-      const elCard = addCard(item.name, item.image);
+      const elCard = createCard(item.name, item.image);
       //Добавляем эту переменную в секцию карточек
       elementSection.prepend(elCard);
       //Также ее можно записать так:
-      //elementSection.prepend(addCard(item.name, item.image))
+      //elementSection.prepend(createCard(item.name, item.image))
     })
 }
 //Запускаем дефолтное заполнение карточками.
@@ -200,7 +203,7 @@ popupFormCardSaveElement.addEventListener('click', function(evt){
   const image = popupFormCard.querySelector('.popup__input_type_description');
   const name = popupFormCard.querySelector('.popup__input_type_name');
   //Создаем переменную внутрь которой передаем функцию с входными параметрами значений(value) инпутов
-  const elCard = addCard(name.value, image.value);
+  const elCard = createCard(name.value, image.value);
   //Добавляем переменную в контейнер section
   elementSection.prepend(elCard);
   //Обнуляем значения инпутов, дабы при открытии они не сохранялись
@@ -213,24 +216,29 @@ popupFormCardSaveElement.addEventListener('click', function(evt){
 
 
 // //Popup  с картинкой
+//Выбираем весь popup
+const popupPic = document.querySelector('.popup_type_pic')
+//Выбираем кнопку закрытия
+const popupPicCardCloseButton = popupPic.querySelector('.popup__button-close');
 
-const popupAllPic = document.querySelector('.popup_type_pic')
-const popupPicCardCloseButton = popupAllPic.querySelector('.popup__button-close');
-
+//Описываем логику открытия popup с картинкой
 function handlePopupPic(element) {
-  openPopup(popupAllPic)
+  //запускаем функцию открытия popup и на вход передаем весь popup
+  openPopup(popupPic)
+  //Выборка элементов картинки и заголовка
   const elementPic = element.querySelector('.element__pic');
   const elementTitle = element.querySelector('.element__name');
-
-  const picTitle = popupAllPic.querySelector('.popup__title-pic');
-  const popupElementPic = popupAllPic.querySelector('.popup__pic')
-
-  picTitle.textContent = elementTitle.textContent;
+  //Выборка popup элементов картинки и заголовка
+  const popupElementTitle = popupPic.querySelector('.popup__title-pic');
+  const popupElementPic = popupPic.querySelector('.popup__pic')
+  //Значению заголовка popup присваиваем значение заголовка элемента
+  popupElementTitle.textContent = elementTitle.textContent;
+  //Значению источника картинки popup присваиваем значение источника элемента
   popupElementPic.src = elementPic.src
 }
 
 //Слушатель и закрытие карточки
 popupPicCardCloseButton.addEventListener('click', function(){
-  closePopup(popupAllPic);
+  closePopup(popupPic);
 });
-
+В
