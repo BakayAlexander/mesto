@@ -2,4 +2,9 @@
     width: 282px;
     height: 282px;
     object-fit: cover;
+    transition: opacity 0.5s ease-in;
+}
+
+.element__pic:hover {
+    opacity: 0.5;
 }

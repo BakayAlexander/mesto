@@ -1,7 +1,30 @@
-//Открытие и закрытие формы
-//Объявление переменных и выборки
-
-const popupElement = document.querySelector('.popup');
+//Массив default карточек
+const initialCards = [
+  {
+    name: 'Архыз',
+    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
+  },
+  {
+    name: 'Челябинская область',
+    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg',
+  },
+  {
+    name: 'Иваново',
+    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg',
+  },
+  {
+    name: 'Камчатка',
+    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
+  },
+  {
+    name: 'Холмогорский район', 
+    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
+  },
+  {
+    name: 'Байкал',
+    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg',
+  },
+];
 
 //Выборка формы редактиврования профиля
 const popupFormProfile = document.querySelector('.popup_type_edit');
@@ -12,7 +35,7 @@ const popupOpenButtonFormProfile = document.querySelector('.profile__edit-button
 
 //Форма редактирования профиля
 //Выборка формы
-const formProfile = popupElement.querySelector('.popup__form-edit');
+const formProfile = popupFormProfile.querySelector('.popup__form-edit');
 
 //Выборка текстовых элементов
 const nameElementFormProfile = document.querySelector('.profile__name');
@@ -56,8 +79,8 @@ function formSubmitHandler(evt) {
   //отменяет дефолтное поведение. Страница не перезагружается после отправки формы
   evt.preventDefault();
   //Вытаскиваем текущие значения input
-  let nameInputValue = nameInput.value;
-  let descriptionInputValue = descriptionInput.value;
+  const nameInputValue = nameInput.value;
+  const descriptionInputValue = descriptionInput.value;
   //Вставляем текущие значения input в textContent html элементов
   nameElementFormProfile.textContent = nameInputValue;
   descriptionElementFormProfile.textContent = descriptionInputValue;
@@ -89,34 +112,6 @@ formProfile.addEventListener('submit', formSubmitHandler);
 
 //5й спринт.----------------------------------------------------------------
 
-//Массив default карточек
-const initialCards = [
-  {
-    name: 'Архыз',
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
-  },
-  {
-    name: 'Челябинская область',
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg',
-  },
-  {
-    name: 'Иваново',
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg',
-  },
-  {
-    name: 'Камчатка',
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
-  },
-  {
-    name: 'Холмогорский район', 
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
-  },
-  {
-    name: 'Байкал',
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg',
-  },
-];
-
 //Достаем секцию element
 const elementSection = document.querySelector('.elements');
 //Достаем template
@@ -125,7 +120,7 @@ const elementTemplate = document.querySelector('.element-template').content;
 //Функция наполнения карточки
 function createCard (name, image) {
   //Достаем и копируем всю заготовку карточки. Делаем локально, поскольку если глобально, цикл будет прогонять ее как новую при каждой итерации.
-  let elementCard = elementTemplate.querySelector('.element').cloneNode(true);
+  const elementCard = elementTemplate.querySelector('.element').cloneNode(true);
   //Вводим текст и картинку  
   elementCard.querySelector('.element__name').textContent = name;
   elementCard.querySelector('.element__pic').src = image;
