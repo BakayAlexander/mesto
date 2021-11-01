@@ -236,4 +236,3 @@ function handlePopupPic(element) {
 popupPicCardCloseButton.addEventListener('click', function(){
   closePopup(popupPic);
 });
-В
