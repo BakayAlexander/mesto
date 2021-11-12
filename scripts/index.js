@@ -195,8 +195,8 @@ popupFormCardCloseElement.addEventListener('click', function(){
 popupFormCardSaveElement.addEventListener('click', function(evt){
   evt.preventDefault();
   //Достаем значения инпутов внутри функции
-  const image = popupFormCard.querySelector('.popup__input_type_description');
-  const name = popupFormCard.querySelector('.popup__input_type_name');
+  const image = popupFormCard.querySelector('.popup__input_type_image-url');
+  const name = popupFormCard.querySelector('.popup__input_type_image-name');
   //Создаем переменную внутрь которой передаем функцию с входными параметрами значений(value) инпутов
   const elCard = createCard(name.value, image.value);
   //Добавляем переменную в контейнер section
