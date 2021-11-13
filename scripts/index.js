@@ -35,7 +35,7 @@ const popupOpenButtonFormProfile = document.querySelector('.profile__edit-button
 
 //Форма редактирования профиля
 //Выборка формы
-const formProfile = popupFormProfile.querySelector('.popup__form-edit');
+const formProfile = popupFormProfile.querySelector('.popup__form');
 
 //Выборка текстовых элементов
 const nameElementFormProfile = document.querySelector('.profile__name');
@@ -50,29 +50,46 @@ const descriptionInput = formProfile.querySelector('.popup__input_type_descripti
 const openPopup = (element) => {
   //переменной element будет присвоен класс открытия popup, он меняет visibility
   element.classList.add('popup_is-opened');
+  //При открытии popup очищаются ошибки валидации input и убираются их стили
+  resetInputErrors(element);
+  //При открытии popup мы запускаем функции закрытия по esc и клику в темной области
+  document.addEventListener('keydown', closePopupByPushingEsc)
+  closePopupByClickOverlay(element)
 };
 
 //Функция закрытия popup
 const closePopup = (element) => {
   element.classList.remove('popup_is-opened');
+  //Убираем слушатель на esc
+  document.removeEventListener('keydown', closePopupByPushingEsc)
+  //При закрытии popup очищаются поля input
+  const inputList = [...element.querySelectorAll('.popup__input')];
+  inputList.forEach((inputElement) => {
+    inputElement.value = '';
+  })
 };
+
+//Функция закрытия при клике по esc
+function closePopupByPushingEsc (evt) {
+  if (evt.key === 'Escape') {
+    const popup = document.querySelector('.popup_is-opened')
+    closePopup(popup);
+  }
+}
+//Функция закрытия при клике по overlay
+function closePopupByClickOverlay (element) {
+  element.addEventListener ('click', function (evt) {
+    if (evt.target === element) {
+      closePopup(element);
+    }
+  })
+}
 
 //Функция заполнения popup (для формы редактирования профиля)
 const fillPopup = () => {
   nameInput.value = nameElementFormProfile.textContent;
   descriptionInput.value = descriptionElementFormProfile.textContent;
 }
-
-
-//Функция закрытия popup при клике на пустую область
-//хочу передавать element внутрь closePopup, но пока не могу реализовать
-// const closePopupByClickOverlay = function (event) {
-//   console.log(`event.target`, event.target)
-//   console.log(`popupElement`, popupElement)
-//   if (event.target === popupElement) {
-//     closePopup(popupElement);
-//   }
-// };
 
 //Функция заполнения формы по кнопке "Сохранить"
 function formSubmitHandler(evt) {
@@ -94,6 +111,8 @@ function formSubmitHandler(evt) {
 popupOpenButtonFormProfile.addEventListener('click', function(){
   openPopup(popupFormProfile);
   fillPopup();
+  //Через запуск валидации при открытии можно валидировать значения, к-е автоматически подтягиваются из карточки 
+  // enableValidation();
 });
 
 //Событие 'Закрытие popup'
@@ -103,11 +122,6 @@ popupCloseButtonFormProfile.addEventListener('click', function(){
 
 //Событие 'Клик по кнопке Сохранить'
 formProfile.addEventListener('submit', formSubmitHandler);
-
-//Событие 'Закрытие popup при клике на пустую область'
-// popupFormProfile.addEventListener('click', closePopupByClickOverlay);
-
-
 
 
 //5й спринт.----------------------------------------------------------------
@@ -195,8 +209,8 @@ popupFormCardCloseElement.addEventListener('click', function(){
 popupFormCardSaveElement.addEventListener('click', function(evt){
   evt.preventDefault();
   //Достаем значения инпутов внутри функции
-  const image = popupFormCard.querySelector('.popup__input_type_description');
-  const name = popupFormCard.querySelector('.popup__input_type_name');
+  const image = popupFormCard.querySelector('.popup__input_type_image-url');
+  const name = popupFormCard.querySelector('.popup__input_type_image-name');
   //Создаем переменную внутрь которой передаем функцию с входными параметрами значений(value) инпутов
   const elCard = createCard(name.value, image.value);
   //Добавляем переменную в контейнер section
