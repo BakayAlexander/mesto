@@ -9,7 +9,7 @@ const obj = {
 
 //Функция показа ошибки на input
 function showInputError (formElement, inputElement, errorMessage) {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  const errorElement = formElement.querySelector(`.popup__input-error_${inputElement.id}`);
   inputElement.classList.add(obj.inputErrorClass);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(obj.errorClass);
@@ -17,7 +17,7 @@ function showInputError (formElement, inputElement, errorMessage) {
 
 //Функция скрытия ошибки на input
 function hideInputError (formElement, inputElement) {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  const errorElement = formElement.querySelector(`.popup__input-error_${inputElement.id}`);
   inputElement.classList.remove(obj.inputErrorClass);
   errorElement.textContent = '';
   errorElement.classList.remove(obj.errorClass);
