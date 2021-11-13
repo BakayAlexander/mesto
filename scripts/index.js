@@ -53,13 +53,15 @@ const openPopup = (element) => {
   //При открытии popup очищаются ошибки валидации input и убираются их стили
   resetInputErrors(element);
   //При открытии popup мы запускаем функции закрытия по esc и клику в темной области
-  closePopupByPushingEsc(element);
-  closePopupByClickOverlay(element);
+  document.addEventListener('keydown', closePopupByPushingEsc)
+  closePopupByClickOverlay(element)
 };
 
 //Функция закрытия popup
 const closePopup = (element) => {
   element.classList.remove('popup_is-opened');
+  //Убираем слушатель на esc
+  document.removeEventListener('keydown', closePopupByPushingEsc)
   //При закрытии popup очищаются поля input
   const inputList = [...element.querySelectorAll('.popup__input')];
   inputList.forEach((inputElement) => {
@@ -68,14 +70,13 @@ const closePopup = (element) => {
 };
 
 //Функция закрытия при клике по esc
-function closePopupByPushingEsc (element) {
-  document.addEventListener ('keydown', function (evt) {
-    if (evt.key === 'Escape') {
-      closePopup(element);
-    }
-  })
+function closePopupByPushingEsc (evt) {
+  if (evt.key === 'Escape') {
+    const popup = document.querySelector('.popup_is-opened')
+    closePopup(popup);
+  }
 }
-
+//Функция закрытия при клике по overlay
 function closePopupByClickOverlay (element) {
   element.addEventListener ('click', function (evt) {
     if (evt.target === element) {
