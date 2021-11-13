@@ -35,7 +35,7 @@ const popupOpenButtonFormProfile = document.querySelector('.profile__edit-button
 
 //Форма редактирования профиля
 //Выборка формы
-const formProfile = popupFormProfile.querySelector('.popup__form-edit');
+const formProfile = popupFormProfile.querySelector('.popup__form');
 
 //Выборка текстовых элементов
 const nameElementFormProfile = document.querySelector('.profile__name');
@@ -50,6 +50,15 @@ const descriptionInput = formProfile.querySelector('.popup__input_type_descripti
 const openPopup = (element) => {
   //переменной element будет присвоен класс открытия popup, он меняет visibility
   element.classList.add('popup_is-opened');
+  const inputList = [...element.querySelectorAll('.popup__input')];
+  const errorList = [...element.querySelectorAll('.popup__input-error')];
+  inputList.forEach((inputElement) =>{
+    inputElement.classList.remove('popup__input_type_error');
+  })
+  errorList.forEach((errorElement) => {
+    errorElement.classList.remove('.popup__input-error_activate');
+    errorElement.textContent = '';
+  })
 };
 
 //Функция закрытия popup

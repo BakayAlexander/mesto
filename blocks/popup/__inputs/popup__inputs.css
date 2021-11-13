@@ -2,7 +2,9 @@
     border: none;
     outline: none;
     margin: 0;
-    padding: 54px 0 0 30px;
+    padding: 54px 30px 0 30px;
+    display: flex;
+    flex-direction: column;
 }
 
 @media screen and (max-width: 800px) {

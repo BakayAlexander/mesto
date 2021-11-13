@@ -37,11 +37,11 @@
       <div class="popup popup_type_edit">
         <div class="popup__container">
           <h2 class="popup__title">Редактировать профиль</h2>
-          <form name="form-edit" class="popup__form-edit">
+          <form name="form-edit" class="popup__form" novalidate>
             <fieldset class="popup__inputs">
-              <input class="popup__input popup__input_type_name" id="popup__input_type_name" type="text" name="fullname" value="">
+              <input class="popup__input popup__input_type_name" id="popup__input_type_name" type="text" name="fullname" value="" required minlength="2" maxlength="20" autocomplete="off">
               <span class="popup__input-error popup__input_type_name-error"></span>
-              <input  class="popup__input popup__input_type_description" id="popup__input_type_description" type="text" name="description" value="">
+              <input  class="popup__input popup__input_type_description" id="popup__input_type_description" type="text" name="description" value="" required minlength="2" maxlength="200" autocomplete="off">
               <span class="popup__input-error popup__input_type_description-error"></span>
             </fieldset>
             <button class="popup__button-save" type="submit">Сохранить</button>
@@ -52,11 +52,11 @@
       <div class="popup popup_type_card">
         <div class="popup__container">
           <h2 class="popup__title">Новое место</h2>
-          <form name="form-card" class="popup__form-edit">
+          <form name="form-card" class="popup__form" novalidate>
             <fieldset class="popup__inputs">
-              <input  class="popup__input popup__input_type_image-name" id="popup__input_type_image-name" type="text" name="fullname" value="" placeholder="Название">
+              <input  class="popup__input popup__input_type_image-name" id="popup__input_type_image-name" type="text" name="fullname" value="" placeholder="Название" required minlength="2" maxlength="30" autocomplete="off">
               <span class="popup__input-error popup__input_type_image-name-error"></span>
-              <input  class="popup__input popup__input_type_image-url" type="text" name="description" value="" placeholder="Ссылка на картинку">
+              <input  class="popup__input popup__input_type_image-url" id="popup__input_type_image-url" type="url" name="description" value="" placeholder="Ссылка на картинку" required autocomplete="off">
               <span class="popup__input-error popup__input_type_image-url-error"></span>
             </fieldset>
             <button class="popup__button-save" type="submit">Создать</button>
@@ -83,5 +83,6 @@
       </article>
     </template>
     <script src="./scripts/index.js"></script>
+    <script src="./scripts/validate.js"></script>
   </body>
 </html>
