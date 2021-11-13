@@ -7,8 +7,6 @@ const obj = {
   errorClass: 'popup__input-error_activate'
 }
 
-enableValidation(obj);
-
 //Функция показа ошибки на input
 function showInputError (formElement, inputElement, errorMessage) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
@@ -75,3 +73,4 @@ function toggleButtonState (inputList, buttonElement) {
   }
 }
 
+enableValidation(obj);

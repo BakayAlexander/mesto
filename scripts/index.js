@@ -50,9 +50,10 @@ const descriptionInput = formProfile.querySelector('.popup__input_type_descripti
 const openPopup = (element) => {
   //переменной element будет присвоен класс открытия popup, он меняет visibility
   element.classList.add('popup_is-opened');
+    //При открытии попапа очищаются ошибки валидации input и убираются их стили
   const inputList = [...element.querySelectorAll('.popup__input')];
   const errorList = [...element.querySelectorAll('.popup__input-error')];
-  inputList.forEach((inputElement) =>{
+  inputList.forEach((inputElement) => {
     inputElement.classList.remove('popup__input_type_error');
   })
   errorList.forEach((errorElement) => {
@@ -64,6 +65,11 @@ const openPopup = (element) => {
 //Функция закрытия popup
 const closePopup = (element) => {
   element.classList.remove('popup_is-opened');
+  //При закрытии popup очищаются поля input
+  const inputList = [...element.querySelectorAll('.popup__input')];
+  inputList.forEach((inputElement) => {
+    inputElement.value = '';
+  })
 };
 
 //Функция заполнения popup (для формы редактирования профиля)
