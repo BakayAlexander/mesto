@@ -60,6 +60,8 @@ const openPopup = (element) => {
     errorElement.classList.remove('.popup__input-error_activate');
     errorElement.textContent = '';
   })
+  closePopupByPushingEsc(element);
+  closePopupByClickOverlay(element);
 };
 
 //Функция закрытия popup
@@ -72,22 +74,28 @@ const closePopup = (element) => {
   })
 };
 
+//Функция закрытия при клике по esc
+function closePopupByPushingEsc (element) {
+  document.addEventListener ('keydown', function (evt) {
+    if (evt.key === 'Escape') {
+      closePopup(element);
+    }
+  })
+}
+
+function closePopupByClickOverlay (element) {
+  element.addEventListener ('click', function (evt) {
+    if (evt.target === element) {
+      closePopup(element);
+    }
+  })
+}
+
 //Функция заполнения popup (для формы редактирования профиля)
 const fillPopup = () => {
   nameInput.value = nameElementFormProfile.textContent;
   descriptionInput.value = descriptionElementFormProfile.textContent;
 }
-
-
-//Функция закрытия popup при клике на пустую область
-//хочу передавать element внутрь closePopup, но пока не могу реализовать
-// const closePopupByClickOverlay = function (event) {
-//   console.log(`event.target`, event.target)
-//   console.log(`popupElement`, popupElement)
-//   if (event.target === popupElement) {
-//     closePopup(popupElement);
-//   }
-// };
 
 //Функция заполнения формы по кнопке "Сохранить"
 function formSubmitHandler(evt) {
@@ -109,6 +117,7 @@ function formSubmitHandler(evt) {
 popupOpenButtonFormProfile.addEventListener('click', function(){
   openPopup(popupFormProfile);
   fillPopup();
+  enableValidation();
 });
 
 //Событие 'Закрытие popup'
@@ -118,6 +127,7 @@ popupCloseButtonFormProfile.addEventListener('click', function(){
 
 //Событие 'Клик по кнопке Сохранить'
 formProfile.addEventListener('submit', formSubmitHandler);
+
 
 //Событие 'Закрытие popup при клике на пустую область'
 // popupFormProfile.addEventListener('click', closePopupByClickOverlay);

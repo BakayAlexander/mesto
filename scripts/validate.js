@@ -20,11 +20,11 @@ function hideInputError (formElement, inputElement) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove(obj.inputErrorClass);
   errorElement.textContent = '';
-  errorElement.classList.remove(obj.errorClas);
+  errorElement.classList.remove(obj.errorClass);
 }
 //Функция запуска валидации
 function enableValidation () {
-  const formList = [...document.querySelectorAll(obj.formSelector)]
+  const formList = [...document.querySelectorAll(obj.formSelector)];
   formList.forEach((formElement) => {
     formElement.addEventListener('submit', function (evt) {
       evt.preventDefault();
@@ -46,7 +46,6 @@ function setEventListeners (formElement) {
   })
 }
 
-
 //Функция показа/скрытия ошибки input
 function checkInputValidity (formElement, inputElement) {
   if (!inputElement.validity.valid) {
@@ -67,7 +66,6 @@ function hasInvalidInput (inputList) {
 function toggleButtonState (inputList, buttonElement) {
   if (hasInvalidInput(inputList)) {
     buttonElement.disabled = true;
-    // buttonElement.classList.add(obj.inactiveButtonClass)
   } else {
     buttonElement.disabled = false;
   }
