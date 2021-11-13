@@ -33,6 +33,8 @@ function enableValidation () {
   })
 }
 
+enableValidation(obj);
+
 //Функция добавления слушателей
 function setEventListeners (formElement) {
   const inputList = [...formElement.querySelectorAll(obj.inputSelector)];
@@ -71,4 +73,15 @@ function toggleButtonState (inputList, buttonElement) {
   }
 }
 
-enableValidation(obj);
+//Функция очистки ошибок input
+function resetInputErrors (element) {
+  const inputList = [...element.querySelectorAll('.popup__input')];
+  const errorList = [...element.querySelectorAll('.popup__input-error')];
+  inputList.forEach((inputElement) => {
+    inputElement.classList.remove('popup__input_type_error');
+  })
+  errorList.forEach((errorElement) => {
+    errorElement.classList.remove('.popup__input-error_activate');
+    errorElement.textContent = '';
+  })
+}

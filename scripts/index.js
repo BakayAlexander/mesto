@@ -50,16 +50,9 @@ const descriptionInput = formProfile.querySelector('.popup__input_type_descripti
 const openPopup = (element) => {
   //переменной element будет присвоен класс открытия popup, он меняет visibility
   element.classList.add('popup_is-opened');
-    //При открытии попапа очищаются ошибки валидации input и убираются их стили
-  const inputList = [...element.querySelectorAll('.popup__input')];
-  const errorList = [...element.querySelectorAll('.popup__input-error')];
-  inputList.forEach((inputElement) => {
-    inputElement.classList.remove('popup__input_type_error');
-  })
-  errorList.forEach((errorElement) => {
-    errorElement.classList.remove('.popup__input-error_activate');
-    errorElement.textContent = '';
-  })
+  //При открытии popup очищаются ошибки валидации input и убираются их стили
+  resetInputErrors(element);
+  //При открытии popup мы запускаем функции закрытия по esc и клику в темной области
   closePopupByPushingEsc(element);
   closePopupByClickOverlay(element);
 };
@@ -117,7 +110,8 @@ function formSubmitHandler(evt) {
 popupOpenButtonFormProfile.addEventListener('click', function(){
   openPopup(popupFormProfile);
   fillPopup();
-  enableValidation();
+  //Через запуск валидации при открытии можно валидировать значения, к-е автоматически подтягиваются из карточки 
+  // enableValidation();
 });
 
 //Событие 'Закрытие popup'
@@ -127,12 +121,6 @@ popupCloseButtonFormProfile.addEventListener('click', function(){
 
 //Событие 'Клик по кнопке Сохранить'
 formProfile.addEventListener('submit', formSubmitHandler);
-
-
-//Событие 'Закрытие popup при клике на пустую область'
-// popupFormProfile.addEventListener('click', closePopupByClickOverlay);
-
-
 
 
 //5й спринт.----------------------------------------------------------------
