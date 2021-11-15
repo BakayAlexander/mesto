@@ -65,7 +65,7 @@ function setEventListeners (formElement) {
 }
 
 //Функция запуска валидации
-function enableValidation () {
+function enableValidation (obj) {
   const formList = [...document.querySelectorAll(obj.formSelector)];
   formList.forEach((formElement) => {
     formElement.addEventListener('submit', function (evt) {
@@ -88,4 +88,12 @@ function resetInputErrors (element) {
     errorElement.classList.remove('.popup__input-error_activate');
     errorElement.textContent = '';
   })
+}
+
+//Функция очистки полей ввода
+function resetInputs (element) {
+  const inputList = [...element.querySelectorAll('.popup__input')];
+  inputList.forEach((inputElement) => {
+    inputElement.value = '';
+  });
 }
