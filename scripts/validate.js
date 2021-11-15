@@ -65,7 +65,7 @@ function setEventListeners (formElement) {
 }
 
 //Функция запуска валидации
-function enableValidation () {
+function enableValidation (obj) {
   const formList = [...document.querySelectorAll(obj.formSelector)];
   formList.forEach((formElement) => {
     formElement.addEventListener('submit', function (evt) {

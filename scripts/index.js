@@ -17,7 +17,7 @@ const initialCards = [
     image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
   },
   {
-    name: 'Холмогорский район', 
+    name: 'Холмогорский район',
     image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
   },
   {
@@ -50,46 +50,44 @@ const descriptionInput = formProfile.querySelector('.popup__input_type_descripti
 const openPopup = (element) => {
   //переменной element будет присвоен класс открытия popup, он меняет visibility
   element.classList.add('popup_is-opened');
-  //При открытии popup очищаются ошибки валидации input и убираются их стили
-  resetInputErrors(element);
   //При открытии popup мы запускаем функции закрытия по esc и клику в темной области
-  document.addEventListener('keydown', closePopupByPushingEsc)
-  closePopupByClickOverlay(element)
+  document.addEventListener('keydown', closePopupByPushingEsc);
+  closePopupByClickOverlay(element);
 };
 
 //Функция закрытия popup
 const closePopup = (element) => {
   element.classList.remove('popup_is-opened');
   //Убираем слушатель на esc
-  document.removeEventListener('keydown', closePopupByPushingEsc)
+  document.removeEventListener('keydown', closePopupByPushingEsc);
   //При закрытии popup очищаются поля input
   const inputList = [...element.querySelectorAll('.popup__input')];
   inputList.forEach((inputElement) => {
     inputElement.value = '';
-  })
+  });
 };
 
 //Функция закрытия при клике по esc
-function closePopupByPushingEsc (evt) {
+function closePopupByPushingEsc(evt) {
   if (evt.key === 'Escape') {
-    const popup = document.querySelector('.popup_is-opened')
+    const popup = document.querySelector('.popup_is-opened');
     closePopup(popup);
   }
 }
 //Функция закрытия при клике по overlay
-function closePopupByClickOverlay (element) {
-  element.addEventListener ('click', function (evt) {
+function closePopupByClickOverlay(element) {
+  element.addEventListener('click', function (evt) {
     if (evt.target === element) {
       closePopup(element);
     }
-  })
+  });
 }
 
 //Функция заполнения popup (для формы редактирования профиля)
 const fillPopup = () => {
   nameInput.value = nameElementFormProfile.textContent;
   descriptionInput.value = descriptionElementFormProfile.textContent;
-}
+};
 
 //Функция заполнения формы по кнопке "Сохранить"
 function formSubmitHandler(evt) {
@@ -108,21 +106,22 @@ function formSubmitHandler(evt) {
 //События
 //Событие 'Открытие popup'
 // popupOpenButtonFormProfile.addEventListener('click', openPopup);
-popupOpenButtonFormProfile.addEventListener('click', function(){
+popupOpenButtonFormProfile.addEventListener('click', function () {
   openPopup(popupFormProfile);
   fillPopup();
-  //Через запуск валидации при открытии можно валидировать значения, к-е автоматически подтягиваются из карточки 
+  //Через запуск валидации при открытии можно валидировать значения, к-е автоматически подтягиваются из карточки
   // enableValidation();
+  //При открытии popup очищаются ошибки валидации input и убираются их стили
+  resetInputErrors(popupFormProfile);
 });
 
 //Событие 'Закрытие popup'
-popupCloseButtonFormProfile.addEventListener('click', function(){
+popupCloseButtonFormProfile.addEventListener('click', function () {
   closePopup(popupFormProfile);
 });
 
 //Событие 'Клик по кнопке Сохранить'
 formProfile.addEventListener('submit', formSubmitHandler);
-
 
 //5й спринт.----------------------------------------------------------------
 
@@ -132,18 +131,18 @@ const elementSection = document.querySelector('.elements');
 const elementTemplate = document.querySelector('.element-template').content;
 
 //Функция наполнения карточки
-function createCard (name, image) {
+function createCard(name, image) {
   //Достаем и копируем всю заготовку карточки. Делаем локально, поскольку если глобально, цикл будет прогонять ее как новую при каждой итерации.
   const elementCard = elementTemplate.querySelector('.element').cloneNode(true);
-  //Вводим текст и картинку  
+  //Вводим текст и картинку
   elementCard.querySelector('.element__name').textContent = name;
   elementCard.querySelector('.element__pic').src = image;
+  elementCard.querySelector('.element__pic').alt = name;
   //Запускаем слушатели на события внутри карточек
   setListeners(elementCard);
   //Результатом действия функции будет возврат заполненной карточки elementCard(.element)
   return elementCard;
-};
-
+}
 
 //Слушатели событий на элементы внутри карточки
 function setListeners(element) {
@@ -153,37 +152,37 @@ function setListeners(element) {
   element.querySelector('.element__delete-button').addEventListener('click', handleCardDelete);
   //Реализуем открытие popup с картинкой. Необходимо вытащить саму картинку, и на нее уже повесить клик.
   //из каждого приходящего element мы достаем картинку
-  const elementPic = element.querySelector('.element__pic')
+  const elementPic = element.querySelector('.element__pic');
   //слушатель на картинку.! В addEventListener нельзя вызывать функцию, на нее можно только сослаться. т.е. написать  handlePopupPic(element) после click нельзя
-  elementPic.addEventListener('click', function() {
-    handlePopupPic(element)
+  elementPic.addEventListener('click', function () {
+    handlePopupPic(element);
   });
 }
 
 //Функция добавления лайка
-function handleLike(evt){
+function handleLike(evt) {
   evt.target.classList.toggle('element__like-button_acive');
   //Более длинная запись с объявлением переменной и навешиванием непосредственно на нее переключателя
   // const eventTarget = evt.target;
   // eventTarget.classList.toggle('element__like-button_acive');
 }
 //Функция удаления карточки. Прописываем через closest чтобы удалять конкретную карточку
-function handleCardDelete(evt){
+function handleCardDelete(evt) {
   evt.target.closest('.element').remove();
 }
 
 //Функция добавления карточек из массива
-function renderCard () {
-    initialCards.forEach((item) => {
-      //Обозначаем переменную с произвольным названием и в нее записываем 
-      //функцию с входящими параметрами, которые вытаскиеваем из массива 
-      //обращением через точку. item - каждый элемент массива
-      const elCard = createCard(item.name, item.image);
-      //Добавляем эту переменную в секцию карточек
-      elementSection.prepend(elCard);
-      //Также ее можно записать так:
-      //elementSection.prepend(createCard(item.name, item.image))
-    })
+function renderCard() {
+  initialCards.forEach((item) => {
+    //Обозначаем переменную с произвольным названием и в нее записываем
+    //функцию с входящими параметрами, которые вытаскиеваем из массива
+    //обращением через точку. item - каждый элемент массива
+    const elCard = createCard(item.name, item.image);
+    //Добавляем эту переменную в секцию карточек
+    elementSection.prepend(elCard);
+    //Также ее можно записать так:
+    //elementSection.prepend(createCard(item.name, item.image))
+  });
 }
 //Запускаем дефолтное заполнение карточками.
 renderCard();
@@ -196,17 +195,18 @@ const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-cl
 const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-save');
 
 //Слушатель и открытие формы
-popupFormCardOpenElement.addEventListener('click', function(){
+popupFormCardOpenElement.addEventListener('click', function () {
   openPopup(popupFormCard);
-})
+  resetInputErrors(popupFormCard);
+});
 
 //Слушатель и закрытие формы
-popupFormCardCloseElement.addEventListener('click', function(){
+popupFormCardCloseElement.addEventListener('click', function () {
   closePopup(popupFormCard);
 });
 
 //Слушать на событие "Создать"
-popupFormCardSaveElement.addEventListener('click', function(evt){
+popupFormCardSaveElement.addEventListener('click', function (evt) {
   evt.preventDefault();
   //Достаем значения инпутов внутри функции
   const image = popupFormCard.querySelector('.popup__input_type_image-url');
@@ -220,33 +220,34 @@ popupFormCardSaveElement.addEventListener('click', function(evt){
   image.value = '';
   //Закрываем форму после нажатия кнопки (Создать)
   closePopup(popupFormCard);
-})
-
-
+  popupFormCardSaveElement.disabled = true;
+  popupFormCardSaveElement.classList.add('popup__button-save_disabled')
+});
 
 // //Popup  с картинкой
 //Выбираем весь popup
-const popupPic = document.querySelector('.popup_type_pic')
+const popupPic = document.querySelector('.popup_type_pic');
 //Выбираем кнопку закрытия
 const popupPicCardCloseButton = popupPic.querySelector('.popup__button-close');
 
 //Описываем логику открытия popup с картинкой
 function handlePopupPic(element) {
   //запускаем функцию открытия popup и на вход передаем весь popup
-  openPopup(popupPic)
+  openPopup(popupPic);
   //Выборка элементов картинки и заголовка
   const elementPic = element.querySelector('.element__pic');
   const elementTitle = element.querySelector('.element__name');
   //Выборка popup элементов картинки и заголовка
   const popupElementTitle = popupPic.querySelector('.popup__title-pic');
-  const popupElementPic = popupPic.querySelector('.popup__pic')
+  const popupElementPic = popupPic.querySelector('.popup__pic');
   //Значению заголовка popup присваиваем значение заголовка элемента
   popupElementTitle.textContent = elementTitle.textContent;
   //Значению источника картинки popup присваиваем значение источника элемента
-  popupElementPic.src = elementPic.src
+  popupElementPic.src = elementPic.src;
+  popupElementPic.alt = elementPic.alt;
 }
 
 //Слушатель и закрытие карточки
-popupPicCardCloseButton.addEventListener('click', function(){
+popupPicCardCloseButton.addEventListener('click', function () {
   closePopup(popupPic);
 });
