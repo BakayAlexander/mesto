@@ -89,3 +89,11 @@ function resetInputErrors (element) {
     errorElement.textContent = '';
   })
 }
+
+//Функция очистки полей ввода
+function resetInputs (element) {
+  const inputList = [...element.querySelectorAll('.popup__input')];
+  inputList.forEach((inputElement) => {
+    inputElement.value = '';
+  });
+}

@@ -32,6 +32,8 @@ const popupFormProfile = document.querySelector('.popup_type_edit');
 const popupCloseButtonFormProfile = document.querySelector('.popup__button-close');
 //Выборка кнопки открытия
 const popupOpenButtonFormProfile = document.querySelector('.profile__edit-button');
+//Выборка кнопки сохранения
+const popupSaveButtonFormProfile = popupFormProfile.querySelector('.popup__button-save');
 
 //Форма редактирования профиля
 //Выборка формы
@@ -52,19 +54,16 @@ const openPopup = (element) => {
   element.classList.add('popup_is-opened');
   //При открытии popup мы запускаем функции закрытия по esc и клику в темной области
   document.addEventListener('keydown', closePopupByPushingEsc);
-  closePopupByClickOverlay(element);
+  element.addEventListener('click', closePopupByClickOverlay)
 };
 
 //Функция закрытия popup
 const closePopup = (element) => {
   element.classList.remove('popup_is-opened');
-  //Убираем слушатель на esc
+  //Убираем слушатель на закрытие по esc и клику в темной области (слушатель необходимо снимать каждый раз)
+  // в протвном случае он будет навешиваться каждый раз - это баг.
   document.removeEventListener('keydown', closePopupByPushingEsc);
-  //При закрытии popup очищаются поля input
-  const inputList = [...element.querySelectorAll('.popup__input')];
-  inputList.forEach((inputElement) => {
-    inputElement.value = '';
-  });
+  element.removeEventListener('click', closePopupByClickOverlay)
 };
 
 //Функция закрытия при клике по esc
@@ -74,13 +73,12 @@ function closePopupByPushingEsc(evt) {
     closePopup(popup);
   }
 }
-//Функция закрытия при клике по overlay
-function closePopupByClickOverlay(element) {
-  element.addEventListener('click', function (evt) {
-    if (evt.target === element) {
-      closePopup(element);
-    }
-  });
+//Функция закрытия при клике по темной области(overlay)
+function closePopupByClickOverlay (evt) {
+  const popup = document.querySelector('.popup_is-opened');
+  if (evt.target === popup) {
+    closePopup (popup);
+  }
 }
 
 //Функция заполнения popup (для формы редактирования профиля)
@@ -89,7 +87,7 @@ const fillPopup = () => {
   descriptionInput.value = descriptionElementFormProfile.textContent;
 };
 
-//Функция заполнения формы по кнопке "Сохранить"
+//Функция заполнения по кнопке "Сохранить" (для формы редактирования профиля)
 function formSubmitHandler(evt) {
   //отменяет дефолтное поведение. Страница не перезагружается после отправки формы
   evt.preventDefault();
@@ -101,9 +99,12 @@ function formSubmitHandler(evt) {
   descriptionElementFormProfile.textContent = descriptionInputValue;
   //Закрываем форму. Вызываем функцию и на вход передаем элемент, которому будет добавлен еще один класс
   closePopup(popupFormProfile);
+  //При сохарении формы деактивируем кнопку "Сохранить"
+  popupSaveButtonFormProfile.disabled = true;
+  popupSaveButtonFormProfile.classList.add('popup__button-save_disabled')
 }
 
-//События
+//События для формы профиля
 //Событие 'Открытие popup'
 // popupOpenButtonFormProfile.addEventListener('click', openPopup);
 popupOpenButtonFormProfile.addEventListener('click', function () {
@@ -111,8 +112,10 @@ popupOpenButtonFormProfile.addEventListener('click', function () {
   fillPopup();
   //Через запуск валидации при открытии можно валидировать значения, к-е автоматически подтягиваются из карточки
   // enableValidation();
-  //При открытии popup очищаются ошибки валидации input и убираются их стили
+  //При открытии popup очищаются ошибки валидации input's и убираются их стили
   resetInputErrors(popupFormProfile);
+  //При открытии popup очищаем поля ввода input's
+  resetInputs(popupCloseButtonFormProfile);
 });
 
 //Событие 'Закрытие popup'
@@ -123,8 +126,9 @@ popupCloseButtonFormProfile.addEventListener('click', function () {
 //Событие 'Клик по кнопке Сохранить'
 formProfile.addEventListener('submit', formSubmitHandler);
 
-//5й спринт.----------------------------------------------------------------
 
+//5й спринт.----------------------------------------------------------------
+// Реализуем наполнение карточек
 //Достаем секцию element
 const elementSection = document.querySelector('.elements');
 //Достаем template
@@ -198,6 +202,7 @@ const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-sav
 popupFormCardOpenElement.addEventListener('click', function () {
   openPopup(popupFormCard);
   resetInputErrors(popupFormCard);
+  resetInputs(popupFormCard);
 });
 
 //Слушатель и закрытие формы
@@ -206,7 +211,7 @@ popupFormCardCloseElement.addEventListener('click', function () {
 });
 
 //Слушать на событие "Создать"
-popupFormCardSaveElement.addEventListener('click', function (evt) {
+popupFormCard.addEventListener('submit', function (evt) {
   evt.preventDefault();
   //Достаем значения инпутов внутри функции
   const image = popupFormCard.querySelector('.popup__input_type_image-url');
@@ -220,11 +225,12 @@ popupFormCardSaveElement.addEventListener('click', function (evt) {
   image.value = '';
   //Закрываем форму после нажатия кнопки (Создать)
   closePopup(popupFormCard);
+  //Деактивируем кнопку (Создать)
   popupFormCardSaveElement.disabled = true;
   popupFormCardSaveElement.classList.add('popup__button-save_disabled')
 });
 
-// //Popup  с картинкой
+//Popup  с картинкой
 //Выбираем весь popup
 const popupPic = document.querySelector('.popup_type_pic');
 //Выбираем кнопку закрытия
