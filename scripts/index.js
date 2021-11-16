@@ -114,8 +114,6 @@ popupOpenButtonFormProfile.addEventListener('click', function () {
   // enableValidation();
   //При открытии popup очищаются ошибки валидации input's и убираются их стили
   resetInputErrors(popupFormProfile);
-  //При открытии popup очищаем поля ввода input's
-  resetInputs(popupCloseButtonFormProfile);
 });
 
 //Событие 'Закрытие popup'
