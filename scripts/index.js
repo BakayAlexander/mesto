@@ -1,30 +1,6 @@
 //Массив default карточек
-const initialCards = [
-  {
-    name: 'Архыз',
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
-  },
-  {
-    name: 'Челябинская область',
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg',
-  },
-  {
-    name: 'Иваново',
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg',
-  },
-  {
-    name: 'Камчатка',
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
-  },
-  {
-    name: 'Холмогорский район',
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
-  },
-  {
-    name: 'Байкал',
-    image: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg',
-  },
-];
+import {initialCards} from './data.js'
+import {Card} from './Card.js'
 
 //Выборка формы редактиврования профиля
 const popupFormProfile = document.querySelector('.popup_type_edit');
@@ -38,6 +14,8 @@ const popupSaveButtonFormProfile = popupFormProfile.querySelector('.popup__butto
 //Форма редактирования профиля
 //Выборка формы
 const formProfile = popupFormProfile.querySelector('.popup__form');
+//Возможен так же такой вариант выборки:
+// const formProfile = document.forms['form-edit']
 
 //Выборка текстовых элементов
 const nameElementFormProfile = document.querySelector('.profile__name');
@@ -130,7 +108,8 @@ formProfile.addEventListener('submit', formSubmitHandler);
 //Достаем секцию element
 const elementSection = document.querySelector('.elements');
 //Достаем template
-const elementTemplate = document.querySelector('.element-template').content;
+// const elementTemplate = document.querySelector('.element-template').content;
+const elementTemplate = document.querySelector('.element-template');
 
 //Функция наполнения карточки
 function createCard(name, image) {
@@ -176,14 +155,17 @@ function handleCardDelete(evt) {
 //Функция добавления карточек из массива
 function renderCard() {
   initialCards.forEach((item) => {
+
+
+    const elCard = new Card(item, elementTemplate)
+
+
     //Обозначаем переменную с произвольным названием и в нее записываем
     //функцию с входящими параметрами, которые вытаскиеваем из массива
     //обращением через точку. item - каждый элемент массива
-    const elCard = createCard(item.name, item.image);
+    // const elCard = createCard(item.name, item.image);
     //Добавляем эту переменную в секцию карточек
-    elementSection.prepend(elCard);
-    //Также ее можно записать так:
-    //elementSection.prepend(createCard(item.name, item.image))
+    elementSection.prepend(elCard.createCard());
   });
 }
 //Запускаем дефолтное заполнение карточками.
@@ -192,6 +174,8 @@ renderCard();
 //Popup форма Card
 //Выборка формы и кнопок с ней связанных
 const popupFormCard = document.querySelector('.popup_type_card');
+//Или вариант выборки формы:
+// const popupFormCard = document.forms['form-card']
 const popupFormCardOpenElement = document.querySelector('.profile__add-button');
 const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-close');
 const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-save');
