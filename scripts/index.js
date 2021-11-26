@@ -1,9 +1,10 @@
-//Массив default карточек
 import {initialCards} from './data.js'
 import {Card} from './Card.js'
-import {openPopup, closePopup, closePopupByPushingEsc, closePopupByClickOverlay} from "./utils.js";
+import {openPopup, closePopup} from "./utils.js";
+import {obj} from './settings.js'
+import {FormValidator, resetInputErrors, resetInputs} from './FormValidator.js'
 
-//Выборка формы редактиврования профиля
+//Форма редактирования профиля
 const popupFormProfile = document.querySelector('.popup_type_edit');
 //Выборка кнопки закрытия
 const popupCloseButtonFormProfile = document.querySelector('.popup__button-close');
@@ -11,12 +12,9 @@ const popupCloseButtonFormProfile = document.querySelector('.popup__button-close
 const popupOpenButtonFormProfile = document.querySelector('.profile__edit-button');
 //Выборка кнопки сохранения
 const popupSaveButtonFormProfile = popupFormProfile.querySelector('.popup__button-save');
-
-//Форма редактирования профиля
 //Выборка формы
-const formProfile = popupFormProfile.querySelector('.popup__form');
-//Возможен так же такой вариант выборки:
-// const formProfile = document.forms['form-edit']
+// const formProfile = popupFormProfile.querySelector('.popup__form');
+const formProfile = document.forms['form-edit']
 
 //Выборка текстовых элементов
 const nameElementFormProfile = document.querySelector('.profile__name');
@@ -32,7 +30,7 @@ const fillPopup = () => {
   descriptionInput.value = descriptionElementFormProfile.textContent;
 };
 
-//Функция заполнения по кнопке "Сохранить" (для формы редактирования профиля)
+//Функция заполнения по кнопке "Сохранить" для формы редактирования профиля
 function formSubmitHandler(evt) {
   //отменяет дефолтное поведение. Страница не перезагружается после отправки формы
   evt.preventDefault();
@@ -49,15 +47,13 @@ function formSubmitHandler(evt) {
   popupSaveButtonFormProfile.classList.add('popup__button-save_disabled')
 }
 
-//События для формы профиля
+//События для формы редактирования профиля
 //Событие 'Открытие popup'
-// popupOpenButtonFormProfile.addEventListener('click', openPopup);
 popupOpenButtonFormProfile.addEventListener('click', function () {
   openPopup(popupFormProfile);
   fillPopup();
-  //Через запуск валидации при открытии можно валидировать значения, к-е автоматически подтягиваются из карточки
-  // enableValidation();
-  //При открытии popup очищаются ошибки валидации input's и убираются их стили
+  const formValidatorProfile = new FormValidator(obj, popupFormProfile)
+  formValidatorProfile.enableValidation();
   resetInputErrors(popupFormProfile);
 });
 
@@ -70,68 +66,16 @@ popupCloseButtonFormProfile.addEventListener('click', function () {
 formProfile.addEventListener('submit', formSubmitHandler);
 
 
-//5й спринт.----------------------------------------------------------------
 // Реализуем наполнение карточек
 //Достаем секцию element
 const elementSection = document.querySelector('.elements');
 //Достаем template
-// const elementTemplate = document.querySelector('.element-template').content;
 const elementTemplate = document.querySelector('.element-template');
 
-//Функция наполнения карточки
-function createCard(name, image) {
-  //Достаем и копируем всю заготовку карточки. Делаем локально, поскольку если глобально, цикл будет прогонять ее как новую при каждой итерации.
-  const elementCard = elementTemplate.content.querySelector('.element').cloneNode(true);
-  //Вводим текст и картинку
-  elementCard.querySelector('.element__name').textContent = name;
-  elementCard.querySelector('.element__pic').src = image;
-  elementCard.querySelector('.element__pic').alt = name;
-  //Запускаем слушатели на события внутри карточек
-  setListeners(elementCard);
-  //Результатом действия функции будет возврат заполненной карточки elementCard(.element)
-  return elementCard;
-}
-
-//Слушатели событий на элементы внутри карточки
-function setListeners(element) {
-  //слушатель на кнопку like
-  element.querySelector('.element__like-button').addEventListener('click', handleLike);
-  //слушатель на кнопку delete
-  element.querySelector('.element__delete-button').addEventListener('click', handleCardDelete);
-  //Реализуем открытие popup с картинкой. Необходимо вытащить саму картинку, и на нее уже повесить клик.
-  //из каждого приходящего element мы достаем картинку
-  const elementPic = element.querySelector('.element__pic');
-  //слушатель на картинку.! В addEventListener нельзя вызывать функцию, на нее можно только сослаться. т.е. написать  handlePopupPic(element) после click нельзя
-  elementPic.addEventListener('click', function () {
-    handlePopupPic(element);
-  });
-}
-
-//Функция добавления лайка
-function handleLike(evt) {
-  evt.target.classList.toggle('element__like-button_acive');
-  //Более длинная запись с объявлением переменной и навешиванием непосредственно на нее переключателя
-  // const eventTarget = evt.target;
-  // eventTarget.classList.toggle('element__like-button_acive');
-}
-//Функция удаления карточки. Прописываем через closest чтобы удалять конкретную карточку
-function handleCardDelete(evt) {
-  evt.target.closest('.element').remove();
-}
-
-//Функция добавления карточек из массива
+//Функция добавления карточек на страницу
 function renderCard() {
   initialCards.forEach((item) => {
-
-
     const elCard = new Card(item, elementTemplate)
-
-
-    //Обозначаем переменную с произвольным названием и в нее записываем
-    //функцию с входящими параметрами, которые вытаскиеваем из массива
-    //обращением через точку. item - каждый элемент массива
-    // const elCard = createCard(item.name, item.image);
-    //Добавляем эту переменную в секцию карточек
     elementSection.prepend(elCard.createCard());
   });
 }
@@ -165,10 +109,15 @@ popupFormCard.addEventListener('submit', function (evt) {
   //Достаем значения инпутов внутри функции
   const image = popupFormCard.querySelector('.popup__input_type_image-url');
   const name = popupFormCard.querySelector('.popup__input_type_image-name');
+  const item = {
+    name: name.value,
+    image: image.value,
+  }
+  const elCard = new Card(item, elementTemplate)
   //Создаем переменную внутрь которой передаем функцию с входными параметрами значений(value) инпутов
-  const elCard = createCard(name.value, image.value);
+  // const elCard = createCard(name.value, image.value);
   //Добавляем переменную в контейнер section
-  elementSection.prepend(elCard);
+  elementSection.prepend(elCard.createCard());
   //Обнуляем значения инпутов, дабы при открытии они не сохранялись
   name.value = '';
   image.value = '';
