@@ -1,6 +1,7 @@
 //Массив default карточек
 import {initialCards} from './data.js'
 import {Card} from './Card.js'
+import {openPopup, closePopup, closePopupByPushingEsc, closePopupByClickOverlay} from "./utils.js";
 
 //Выборка формы редактиврования профиля
 const popupFormProfile = document.querySelector('.popup_type_edit');
@@ -24,40 +25,6 @@ const descriptionElementFormProfile = document.querySelector('.profile__descript
 //Выборка элементов формы input
 const nameInput = formProfile.querySelector('.popup__input_type_name');
 const descriptionInput = formProfile.querySelector('.popup__input_type_description');
-
-//Функции
-//Функция открытия popup
-const openPopup = (element) => {
-  //переменной element будет присвоен класс открытия popup, он меняет visibility
-  element.classList.add('popup_is-opened');
-  //При открытии popup мы запускаем функции закрытия по esc и клику в темной области
-  document.addEventListener('keydown', closePopupByPushingEsc);
-  element.addEventListener('click', closePopupByClickOverlay)
-};
-
-//Функция закрытия popup
-const closePopup = (element) => {
-  element.classList.remove('popup_is-opened');
-  //Убираем слушатель на закрытие по esc и клику в темной области (слушатель необходимо снимать каждый раз)
-  // в протвном случае он будет навешиваться каждый раз - это баг.
-  document.removeEventListener('keydown', closePopupByPushingEsc);
-  element.removeEventListener('click', closePopupByClickOverlay)
-};
-
-//Функция закрытия при клике по esc
-function closePopupByPushingEsc(evt) {
-  if (evt.key === 'Escape') {
-    const popup = document.querySelector('.popup_is-opened');
-    closePopup(popup);
-  }
-}
-//Функция закрытия при клике по темной области(overlay)
-function closePopupByClickOverlay (evt) {
-  const popup = document.querySelector('.popup_is-opened');
-  if (evt.target === popup) {
-    closePopup (popup);
-  }
-}
 
 //Функция заполнения popup (для формы редактирования профиля)
 const fillPopup = () => {
@@ -114,7 +81,7 @@ const elementTemplate = document.querySelector('.element-template');
 //Функция наполнения карточки
 function createCard(name, image) {
   //Достаем и копируем всю заготовку карточки. Делаем локально, поскольку если глобально, цикл будет прогонять ее как новую при каждой итерации.
-  const elementCard = elementTemplate.querySelector('.element').cloneNode(true);
+  const elementCard = elementTemplate.content.querySelector('.element').cloneNode(true);
   //Вводим текст и картинку
   elementCard.querySelector('.element__name').textContent = name;
   elementCard.querySelector('.element__pic').src = image;

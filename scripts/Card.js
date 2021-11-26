@@ -1,3 +1,5 @@
+import {openPopup} from "./utils.js";
+
 export class Card {
   constructor (data, template) {
     this._name = data.name;
@@ -16,10 +18,18 @@ export class Card {
     this._elementCard = this._getTempalte();
     this._elementCard.querySelector('.element__like-button').addEventListener('click', this._handleLike);
     this._elementCard.querySelector('.element__delete-button').addEventListener('click', this._handleDelete);
-    // const elementPic = this._element.querySelector('.element__pic');
-    // elementPic.addEventListen er('click', function () {
-    //   handlePopupPic(element);
-    // });
+    //Реализовываем событие открытие popup с картинкой
+    const popupPic = document.querySelector('.popup_type_pic');
+    const elementPic = this._elementCard.querySelector('.element__pic');
+    const elementTitle = this._elementCard.querySelector('.element__name');
+    const popupElementTitle = popupPic.querySelector('.popup__title-pic');
+    const popupElementPic = popupPic.querySelector('.popup__pic');
+    elementPic.addEventListener('click', function () {
+      openPopup(popupPic);
+      popupElementTitle.textContent = elementTitle.textContent;
+      popupElementPic.src = elementPic.src;
+      popupElementPic.alt = elementPic.alt;
+    });
   } 
 
   _handleLike = (evt) => {
@@ -27,7 +37,6 @@ export class Card {
   }
 
   _handleDelete = () => {
-    console.log(`object`, this._elementCard)
     this._elementCard.remove();
   }
 
