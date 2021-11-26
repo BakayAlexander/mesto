@@ -94,6 +94,8 @@ const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-sav
 //Слушатель и открытие формы
 popupFormCardOpenElement.addEventListener('click', function () {
   openPopup(popupFormCard);
+  const formValidatorCard = new FormValidator(obj, popupFormCard)
+  formValidatorCard.enableValidation();
   resetInputErrors(popupFormCard);
   resetInputs(popupFormCard);
 });
@@ -114,9 +116,6 @@ popupFormCard.addEventListener('submit', function (evt) {
     image: image.value,
   }
   const elCard = new Card(item, elementTemplate)
-  //Создаем переменную внутрь которой передаем функцию с входными параметрами значений(value) инпутов
-  // const elCard = createCard(name.value, image.value);
-  //Добавляем переменную в контейнер section
   elementSection.prepend(elCard.createCard());
   //Обнуляем значения инпутов, дабы при открытии они не сохранялись
   name.value = '';
