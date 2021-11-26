@@ -4,6 +4,8 @@ import {openPopup, closePopup} from "./utils.js";
 import {obj} from './settings.js'
 import {FormValidator, resetInputErrors, resetInputs} from './FormValidator.js'
 
+
+
 //Форма редактирования профиля
 const popupFormProfile = document.querySelector('.popup_type_edit');
 //Выборка кнопки закрытия
@@ -13,24 +15,23 @@ const popupOpenButtonFormProfile = document.querySelector('.profile__edit-button
 //Выборка кнопки сохранения
 const popupSaveButtonFormProfile = popupFormProfile.querySelector('.popup__button-save');
 //Выборка формы
-// const formProfile = popupFormProfile.querySelector('.popup__form');
 const formProfile = document.forms['form-edit']
 
 //Выборка текстовых элементов
 const nameElementFormProfile = document.querySelector('.profile__name');
 const descriptionElementFormProfile = document.querySelector('.profile__description');
 
-//Выборка элементов формы input
+//Выборка input
 const nameInput = formProfile.querySelector('.popup__input_type_name');
 const descriptionInput = formProfile.querySelector('.popup__input_type_description');
 
-//Функция заполнения popup (для формы редактирования профиля)
+//Функция наполнения полей (нужна при открытии)
 const fillPopup = () => {
   nameInput.value = nameElementFormProfile.textContent;
   descriptionInput.value = descriptionElementFormProfile.textContent;
 };
 
-//Функция заполнения по кнопке "Сохранить" для формы редактирования профиля
+//Функция заполнения
 function formSubmitHandler(evt) {
   //отменяет дефолтное поведение. Страница не перезагружается после отправки формы
   evt.preventDefault();
@@ -47,11 +48,11 @@ function formSubmitHandler(evt) {
   popupSaveButtonFormProfile.classList.add('popup__button-save_disabled')
 }
 
-//События для формы редактирования профиля
 //Событие 'Открытие popup'
 popupOpenButtonFormProfile.addEventListener('click', function () {
   openPopup(popupFormProfile);
   fillPopup();
+  //Запускаем валидацию
   const formValidatorProfile = new FormValidator(obj, popupFormProfile)
   formValidatorProfile.enableValidation();
   resetInputErrors(popupFormProfile);
@@ -66,7 +67,8 @@ popupCloseButtonFormProfile.addEventListener('click', function () {
 formProfile.addEventListener('submit', formSubmitHandler);
 
 
-// Реализуем наполнение карточек
+
+//Наполнение дефолтными карточками
 //Достаем секцию element
 const elementSection = document.querySelector('.elements');
 //Достаем template
@@ -82,6 +84,8 @@ function renderCard() {
 //Запускаем дефолтное заполнение карточками.
 renderCard();
 
+
+
 //Popup форма Card
 //Выборка формы и кнопок с ней связанных
 const popupFormCard = document.querySelector('.popup_type_card');
@@ -91,16 +95,17 @@ const popupFormCardOpenElement = document.querySelector('.profile__add-button');
 const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-close');
 const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-save');
 
-//Слушатель и открытие формы
+//Слушатель на открытие
 popupFormCardOpenElement.addEventListener('click', function () {
   openPopup(popupFormCard);
+  //Запускаем валидацию
   const formValidatorCard = new FormValidator(obj, popupFormCard)
   formValidatorCard.enableValidation();
   resetInputErrors(popupFormCard);
   resetInputs(popupFormCard);
 });
 
-//Слушатель и закрытие формы
+//Слушатель на закрытие
 popupFormCardCloseElement.addEventListener('click', function () {
   closePopup(popupFormCard);
 });
@@ -127,30 +132,16 @@ popupFormCard.addEventListener('submit', function (evt) {
   popupFormCardSaveElement.classList.add('popup__button-save_disabled')
 });
 
+
+
 //Popup  с картинкой
 //Выбираем весь popup
 const popupPic = document.querySelector('.popup_type_pic');
+
 //Выбираем кнопку закрытия
 const popupPicCardCloseButton = popupPic.querySelector('.popup__button-close');
 
-//Описываем логику открытия popup с картинкой
-function handlePopupPic(element) {
-  //запускаем функцию открытия popup и на вход передаем весь popup
-  openPopup(popupPic);
-  //Выборка элементов картинки и заголовка
-  const elementPic = element.querySelector('.element__pic');
-  const elementTitle = element.querySelector('.element__name');
-  //Выборка popup элементов картинки и заголовка
-  const popupElementTitle = popupPic.querySelector('.popup__title-pic');
-  const popupElementPic = popupPic.querySelector('.popup__pic');
-  //Значению заголовка popup присваиваем значение заголовка элемента
-  popupElementTitle.textContent = elementTitle.textContent;
-  //Значению источника картинки popup присваиваем значение источника элемента
-  popupElementPic.src = elementPic.src;
-  popupElementPic.alt = elementPic.alt;
-}
-
-//Слушатель и закрытие карточки
+//Слушатель на закрытие
 popupPicCardCloseButton.addEventListener('click', function () {
   closePopup(popupPic);
 });

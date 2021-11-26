@@ -1,5 +1,3 @@
-import {obj} from './settings.js'
-
 export class FormValidator {
   constructor (obj, formElement) {
     this._formElement = formElement;
@@ -14,17 +12,17 @@ export class FormValidator {
   //Функция показа ошибки на input
   _showInputError = (formElement, inputElement, errorMessage) => {
     const errorElement = formElement.querySelector(`.popup__input-error_${inputElement.id}`);
-    inputElement.classList.add(obj.inputErrorClass);
+    inputElement.classList.add(this._inputErrorClass);
     errorElement.textContent = errorMessage;
-    errorElement.classList.add(obj.errorClass);
+    errorElement.classList.add(this._errorClass);
   };
 
   //Функция скрытия ошибки на input
   _hideInputError = (formElement, inputElement) => {
     const errorElement = formElement.querySelector(`.popup__input-error_${inputElement.id}`);
-    inputElement.classList.remove(obj.inputErrorClass);
+    inputElement.classList.remove(this._inputErrorClass);
     errorElement.textContent = '';
-    errorElement.classList.remove(obj.errorClass);
+    errorElement.classList.remove(this._errorClass);
   }
 
   //Функция показа/скрытия ошибки input
@@ -47,10 +45,10 @@ export class FormValidator {
   _toggleButtonState = (inputList, buttonElement) => {
     if (this._hasInvalidInput(inputList)) {
       buttonElement.disabled = true;
-      buttonElement.classList.add(obj.inactiveButtonClass);
+      buttonElement.classList.add(this._inactiveButtonClass);
     } else {
       buttonElement.disabled = false;
-      buttonElement.classList.remove(obj.inactiveButtonClass);
+      buttonElement.classList.remove(this._inactiveButtonClass);
     }
   }
 

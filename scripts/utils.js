@@ -6,7 +6,6 @@ export const openPopup = (element) => {
   element.addEventListener('click', closePopupByClickOverlay)
 };
 
-//Функция закрытия popup
 export const closePopup = (element) => {
   element.classList.remove('popup_is-opened');
   //Убираем слушатель на закрытие по esc и клику в темной области (слушатель необходимо снимать каждый раз)
@@ -15,14 +14,13 @@ export const closePopup = (element) => {
   element.removeEventListener('click', closePopupByClickOverlay)
 };
 
-//Функция закрытия при клике по esc
 export function closePopupByPushingEsc(evt) {
   if (evt.key === 'Escape') {
     const popup = document.querySelector('.popup_is-opened');
     closePopup(popup);
   }
 }
-//Функция закрытия при клике по темной области(overlay)
+
 export function closePopupByClickOverlay (evt) {
   const popup = document.querySelector('.popup_is-opened');
   if (evt.target === popup) {

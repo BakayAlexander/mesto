@@ -8,7 +8,6 @@ export class Card {
   }
   
   _getTempalte() {
-    // const elementCard = document.querySelector('.element-template').content.querySelector('.element').cloneNode(true);
     const elementCard = this._template.content.querySelector('.element').cloneNode(true);
     return elementCard;
   }
@@ -24,7 +23,7 @@ export class Card {
     const elementTitle = this._elementCard.querySelector('.element__name');
     const popupElementTitle = popupPic.querySelector('.popup__title-pic');
     const popupElementPic = popupPic.querySelector('.popup__pic');
-    elementPic.addEventListener('click', function () {
+    elementPic.addEventListener('click', () => {
       openPopup(popupPic);
       popupElementTitle.textContent = elementTitle.textContent;
       popupElementPic.src = elementPic.src;
@@ -40,7 +39,7 @@ export class Card {
     this._elementCard.remove();
   }
 
-  createCard () {
+  createCard = () => {
     this._elementCard = this._getTempalte();
     this._setEventListeners();
     this._elementCard.querySelector('.element__name').textContent = this._name;
