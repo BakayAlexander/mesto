@@ -9,6 +9,16 @@ export class FormValidator {
     this._errorClass = obj.errorClass;
   }
 
+  _getInputList(formElement) {
+    const inputList = [...formElement.querySelectorAll(this._inputSelector)];
+    return inputList
+  }
+
+  _getSubmitButton(formElement) {
+    const buttonElement = formElement.querySelector(this._submitButtonSelector);
+    return buttonElement
+  }
+
   //Функция показа ошибки на input
   _showInputError = (formElement, inputElement, errorMessage) => {
     const errorElement = formElement.querySelector(`.popup__input-error_${inputElement.id}`);
@@ -54,8 +64,8 @@ export class FormValidator {
 
   //Функция добавления слушателей
   _setEventListeners = (formElement) => {
-    const inputList = [...formElement.querySelectorAll(this._inputSelector)];
-    const buttonElement = formElement.querySelector(this._submitButtonSelector);
+    const inputList = this._getInputList(formElement);
+    const buttonElement = this._getSubmitButton(formElement);
     this._toggleButtonState(inputList, buttonElement);
     inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => {
@@ -73,27 +83,22 @@ export class FormValidator {
     })
     this._setEventListeners(this._formElement);
   }
-}
 
-
-
-//Функция очистки ошибок input
-export function resetInputErrors (element) {
-  const inputList = [...element.querySelectorAll('.popup__input')];
-  const errorList = [...element.querySelectorAll('.popup__input-error')];
-  inputList.forEach((inputElement) => {
-    inputElement.classList.remove('popup__input_type_error');
-  })
-  errorList.forEach((errorElement) => {
-    errorElement.classList.remove('.popup__input-error_activate');
-    errorElement.textContent = '';
-  })
-}
-
-//Функция очистки полей ввода
-export function resetInputs (element) {
-  const inputList = [...element.querySelectorAll('.popup__input')];
-  inputList.forEach((inputElement) => {
-    inputElement.value = '';
-  });
+  //Функция перезагрузки ошибок и кнопок
+  resetValidation() {  
+    const inputList = this._getInputList(this._formElement)
+    const buttonElement = this._getSubmitButton(this._formElement);
+    this._toggleButtonState(inputList, buttonElement);
+    inputList.forEach((inputElement) => {
+      this._hideInputError(this._formElement, inputElement)
+    });
+  }
+  
+  //Функция очистки полей ввода
+  resetInputs () {
+    const inputList = this._getInputList(this._formElement)
+    inputList.forEach((inputElement) => {
+      inputElement.value = '';
+    });
+  }
 }

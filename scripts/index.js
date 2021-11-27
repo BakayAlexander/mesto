@@ -1,8 +1,8 @@
-import {initialCards} from './data.js'
+import {initialCards} from './utils/data.js'
 import {Card} from './Card.js'
-import {openPopup, closePopup} from "./utils.js";
-import {obj} from './settings.js'
-import {FormValidator, resetInputErrors, resetInputs} from './FormValidator.js'
+import {openPopup, closePopup} from "./utils/utils.js";
+import {obj} from './utils/settings.js'
+import {FormValidator} from './FormValidator.js'
 
 
 
@@ -31,6 +31,10 @@ const fillPopup = () => {
   descriptionInput.value = descriptionElementFormProfile.textContent;
 };
 
+//Запускаем валидацию
+const formValidatorProfile = new FormValidator(obj, popupFormProfile)
+formValidatorProfile.enableValidation();
+
 //Функция заполнения
 function formSubmitHandler(evt) {
   //отменяет дефолтное поведение. Страница не перезагружается после отправки формы
@@ -52,10 +56,7 @@ function formSubmitHandler(evt) {
 popupOpenButtonFormProfile.addEventListener('click', function () {
   openPopup(popupFormProfile);
   fillPopup();
-  //Запускаем валидацию
-  const formValidatorProfile = new FormValidator(obj, popupFormProfile)
-  formValidatorProfile.enableValidation();
-  resetInputErrors(popupFormProfile);
+  formValidatorProfile.resetValidation();
 });
 
 //Событие 'Закрытие popup'
@@ -74,11 +75,16 @@ const elementSection = document.querySelector('.elements');
 //Достаем template
 const elementTemplate = document.querySelector('.element-template');
 
+//Функция генерации карточки из класса Card
+function generateCard (data, template) {
+  const card = new Card(data, template);
+  return card;
+}
+
 //Функция добавления карточек на страницу
 function renderCard() {
   initialCards.forEach((item) => {
-    const elCard = new Card(item, elementTemplate)
-    elementSection.prepend(elCard.createCard());
+    elementSection.prepend(generateCard(item, elementTemplate).createCard());
   });
 }
 //Запускаем дефолтное заполнение карточками.
@@ -95,14 +101,15 @@ const popupFormCardOpenElement = document.querySelector('.profile__add-button');
 const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-close');
 const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-save');
 
+//Запускаем валидацию
+const formValidatorCard = new FormValidator(obj, popupFormCard)
+formValidatorCard.enableValidation();
+
 //Слушатель на открытие
 popupFormCardOpenElement.addEventListener('click', function () {
   openPopup(popupFormCard);
-  //Запускаем валидацию
-  const formValidatorCard = new FormValidator(obj, popupFormCard)
-  formValidatorCard.enableValidation();
-  resetInputErrors(popupFormCard);
-  resetInputs(popupFormCard);
+  formValidatorCard.resetValidation();
+  formValidatorCard.resetInputs();
 });
 
 //Слушатель на закрытие
@@ -120,8 +127,7 @@ popupFormCard.addEventListener('submit', function (evt) {
     name: name.value,
     image: image.value,
   }
-  const elCard = new Card(item, elementTemplate)
-  elementSection.prepend(elCard.createCard());
+  elementSection.prepend(generateCard(item, elementTemplate).createCard());
   //Обнуляем значения инпутов, дабы при открытии они не сохранялись
   name.value = '';
   image.value = '';
