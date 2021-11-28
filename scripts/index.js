@@ -1,10 +1,8 @@
-import {initialCards} from './utils/data.js'
-import {Card} from './Card.js'
-import {openPopup, closePopup} from "./utils/utils.js";
-import {obj} from './utils/settings.js'
-import {FormValidator} from './FormValidator.js'
-
-
+import { initialCards } from './utils/data.js';
+import { Card } from './Card.js';
+import { openPopup, closePopup } from './utils/utils.js';
+import { obj } from './utils/settings.js';
+import { FormValidator } from './FormValidator.js';
 
 //Форма редактирования профиля
 const popupFormProfile = document.querySelector('.popup_type_edit');
@@ -12,10 +10,8 @@ const popupFormProfile = document.querySelector('.popup_type_edit');
 const popupCloseButtonFormProfile = document.querySelector('.popup__button-close');
 //Выборка кнопки открытия
 const popupOpenButtonFormProfile = document.querySelector('.profile__edit-button');
-//Выборка кнопки сохранения
-const popupSaveButtonFormProfile = popupFormProfile.querySelector('.popup__button-save');
 //Выборка формы
-const formProfile = document.forms['form-edit']
+const formProfile = document.forms['form-edit'];
 
 //Выборка текстовых элементов
 const nameElementFormProfile = document.querySelector('.profile__name');
@@ -32,7 +28,7 @@ const fillPopup = () => {
 };
 
 //Запускаем валидацию
-const formValidatorProfile = new FormValidator(obj, popupFormProfile)
+const formValidatorProfile = new FormValidator(obj, popupFormProfile);
 formValidatorProfile.enableValidation();
 
 //Функция заполнения
@@ -47,9 +43,6 @@ function formSubmitHandler(evt) {
   descriptionElementFormProfile.textContent = descriptionInputValue;
   //Закрываем форму. Вызываем функцию и на вход передаем элемент, которому будет добавлен еще один класс
   closePopup(popupFormProfile);
-  //При сохарении формы деактивируем кнопку "Сохранить"
-  popupSaveButtonFormProfile.disabled = true;
-  popupSaveButtonFormProfile.classList.add('popup__button-save_disabled')
 }
 
 //Событие 'Открытие popup'
@@ -67,8 +60,6 @@ popupCloseButtonFormProfile.addEventListener('click', function () {
 //Событие 'Клик по кнопке Сохранить'
 formProfile.addEventListener('submit', formSubmitHandler);
 
-
-
 //Наполнение дефолтными карточками
 //Достаем секцию element
 const elementSection = document.querySelector('.elements');
@@ -76,21 +67,19 @@ const elementSection = document.querySelector('.elements');
 const elementTemplate = document.querySelector('.element-template');
 
 //Функция генерации карточки из класса Card
-function generateCard (data, template) {
+function generateCard(data, template) {
   const card = new Card(data, template);
-  return card;
+  return card.createCard();
 }
 
 //Функция добавления карточек на страницу
 function renderCard() {
   initialCards.forEach((item) => {
-    elementSection.prepend(generateCard(item, elementTemplate).createCard());
+    elementSection.prepend(generateCard(item, elementTemplate));
   });
 }
 //Запускаем дефолтное заполнение карточками.
 renderCard();
-
-
 
 //Popup форма Card
 //Выборка формы и кнопок с ней связанных
@@ -102,7 +91,7 @@ const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-cl
 const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-save');
 
 //Запускаем валидацию
-const formValidatorCard = new FormValidator(obj, popupFormCard)
+const formValidatorCard = new FormValidator(obj, popupFormCard);
 formValidatorCard.enableValidation();
 
 //Слушатель на открытие
@@ -126,8 +115,8 @@ popupFormCard.addEventListener('submit', function (evt) {
   const item = {
     name: name.value,
     image: image.value,
-  }
-  elementSection.prepend(generateCard(item, elementTemplate).createCard());
+  };
+  elementSection.prepend(generateCard(item, elementTemplate));
   //Обнуляем значения инпутов, дабы при открытии они не сохранялись
   name.value = '';
   image.value = '';
@@ -135,15 +124,13 @@ popupFormCard.addEventListener('submit', function (evt) {
   closePopup(popupFormCard);
   //Деактивируем кнопку (Создать)
   popupFormCardSaveElement.disabled = true;
-  popupFormCardSaveElement.classList.add('popup__button-save_disabled')
+  popupFormCardSaveElement.classList.add('popup__button-save_disabled');
 });
 
-
-
 //Popup  с картинкой
+
 //Выбираем весь popup
 const popupPic = document.querySelector('.popup_type_pic');
-
 //Выбираем кнопку закрытия
 const popupPicCardCloseButton = popupPic.querySelector('.popup__button-close');
 
