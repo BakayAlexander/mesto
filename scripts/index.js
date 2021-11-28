@@ -1,3 +1,5 @@
+//Прошу прощения, за сильные изменения в коде, я думал что проект уже готов и взялся за настройку Prettier. Кто ж знал, что я такой невнимательный и забыл пофиксить эллементарные вещи. И большое спасибо, за ревью, Михаил!
+
 import { initialCards } from './utils/data.js';
 import { Card } from './Card.js';
 import { openPopup, closePopup } from './utils/utils.js';
