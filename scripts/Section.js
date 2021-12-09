@@ -4,4 +4,6 @@ export class Section {
     this._renderItems = items;
     this._container = container;
   }
+  //отрисовываем отдельный элемент
+  //метод addItem, который принимает DOM-элемент и добавляет его в контейнер.
 }
