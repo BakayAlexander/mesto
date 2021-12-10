@@ -3,6 +3,7 @@ import { Card } from './Card.js';
 import { openPopup, closePopup } from './utils/utils.js';
 import { obj } from './utils/settings.js';
 import { FormValidator } from './FormValidator.js';
+import { Section } from './Section.js';
 
 //Форма редактирования профиля
 const popupFormProfile = document.querySelector('.popup_type_edit');
@@ -72,14 +73,28 @@ function generateCard(data, template) {
   return card.createCard();
 }
 
+const cardList = new Section(
+  {
+    items: initialCards,
+    renderer: (item) => {
+      const card = new Card(item, elementTemplate);
+      const cardElement = card.createCard();
+      cardList.addItem(cardElement);
+    },
+  },
+  elementSection
+);
+
+cardList.renderItems();
+
 //Функция добавления карточек на страницу
-function renderCard() {
-  initialCards.forEach((item) => {
-    elementSection.prepend(generateCard(item, elementTemplate));
-  });
-}
+// function renderCard() {
+//   initialCards.forEach((item) => {
+//     elementSection.prepend(generateCard(item, elementTemplate));
+//   });
+// }
 //Запускаем дефолтное заполнение карточками.
-renderCard();
+// renderCard();
 
 //Popup форма Card
 //Выборка формы и кнопок с ней связанных
