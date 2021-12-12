@@ -8,6 +8,15 @@ export class PopupWithForm extends Popup {
   }
 
   _getInputValues() {
-    this._popup;
+    this._popup.querySelectorAll('.popup__input');
+  }
+
+  setEventListeners() {
+    super.setEventListeners();
+    this._submiter();
+  }
+
+  close() {
+    super.close();
   }
 }

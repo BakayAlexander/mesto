@@ -4,7 +4,9 @@ export class UserInfo {
     this._description = description;
   }
 
-  getUserInfo() {}
+  getUserInfo() {
+    return {};
+  }
 
   setUserInfo() {}
 }

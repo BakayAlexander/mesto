@@ -89,10 +89,8 @@ function generateCard(data, template) {
   //!!!!!!! Эти константы черт знает что
   const name = data.name;
   const image = data.image;
-  const card = new Card(data, template, {
-    handleCardClick: (data) => {
-      popupWithImageClass.open({ name, image });
-    },
+  const card = new Card(data, template, () => {
+    popupWithImageClass.open(data);
   }).createCard();
   return card;
 }
