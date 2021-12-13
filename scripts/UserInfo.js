@@ -2,7 +2,6 @@ export class UserInfo {
   constructor({ name, description }) {
     this._name = document.querySelector(name);
     this._description = document.querySelector(description);
-    console.log(description);
   }
 
   getUserInfo() {
