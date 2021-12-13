@@ -6,9 +6,10 @@ import { FormValidator } from './FormValidator.js';
 import { Section } from './Section.js';
 import { Popup } from './Popup.js';
 import { PopupWithImage } from './PopupWithImage.js';
+import { PopupWithForm } from './PopupWithForm.js';
 
 //Форма редактирования профиля
-const popupSelectorProfile = document.querySelector('.popup_type_edit');
+// const popupSelectorProfile = document.querySelector('.popup_type_edit');
 const popupSelectorProfile1 = '.popup_type_edit';
 //Выборка кнопки закрытия
 // const popupCloseButtonFormProfile = document.querySelector('.popup__button-close');
@@ -86,9 +87,6 @@ popupWithImageClass.setEventListeners();
 
 //Функция генерации карточки из класса Card
 function generateCard(data, template) {
-  //!!!!!!! Эти константы черт знает что
-  const name = data.name;
-  const image = data.image;
   const card = new Card(data, template, () => {
     popupWithImageClass.open(data);
   }).createCard();
@@ -118,60 +116,40 @@ cardList.renderItems();
 
 //Popup форма Card
 //Выборка формы и кнопок с ней связанных
-const popupFormCard = document.querySelector('.popup_type_card');
+// const popupFormCard = document.querySelector('.popup_type_card');
 //!!!!!!!!!!!!!!!!
-const popupFormCard1 = '.popup_type_card';
+const popupFormCard = '.popup_type_card';
 
 //Или вариант выборки формы:
 const popupFormCardOpenElement = document.querySelector('.profile__add-button');
-const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-close');
-const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-save');
+// const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-close');
+// const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-save');
 
 //Создаем новый класс popup для формы добавления карточек
-const popupFormCardClass = new Popup(popupFormCard1);
+// const popupFormCardClass = new Popup(popupFormCard);
+
+// popupFormCardClass.setEventListeners();
 
 //Запускаем валидацию
 const formValidatorCard = new FormValidator(obj, formCard);
 formValidatorCard.enableValidation();
 
+const PopupWithFormClass = new PopupWithForm(popupFormCard, {
+  submiter: (item) => {
+    elementSection.prepend(generateCard(item, elementTemplate));
+  },
+});
+
+PopupWithFormClass.setEventListeners();
+
 //Слушатель на открытие
 popupFormCardOpenElement.addEventListener('click', function () {
-  // openPopup(popupFormCard);
-  popupFormCardClass.open();
+  PopupWithFormClass.open();
   formValidatorCard.resetValidation();
-  formValidatorCard.resetInputs();
+  // formValidatorCard.resetInputs();
 });
 
 //Слушатель на закрытие
-popupFormCardCloseElement.addEventListener('click', function () {
-  popupFormCardClass.close();
-});
-
-//Слушать на событие "Создать"
-popupFormCard.addEventListener('submit', function (evt) {
-  evt.preventDefault();
-  //Достаем значения инпутов внутри функции
-  const image = popupFormCard.querySelector('.popup__input_type_image-url');
-  const name = popupFormCard.querySelector('.popup__input_type_image-name');
-  const item = {
-    name: name.value,
-    image: image.value,
-  };
-  elementSection.prepend(generateCard(item, elementTemplate));
-  //Обнуляем значения инпутов, дабы при открытии они не сохранялись
-  name.value = '';
-  image.value = '';
-  //Закрываем форму после нажатия кнопки (Создать)
-  // closePopup(popupFormCard);
-  popupFormCardClass.close();
-  //Деактивируем кнопку (Создать)
-  popupFormCardSaveElement.disabled = true;
-  popupFormCardSaveElement.classList.add('popup__button-save_disabled');
-});
-
-//Popup  с картинкой
-
-//Слушатель на закрытие
-// popupPicCardCloseButton.addEventListener('click', function () {
-//   closePopup(popupPic);
+// popupFormCardCloseElement.addEventListener('click', function () {
+//   popupFormCardClass.close();
 // });

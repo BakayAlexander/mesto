@@ -9,6 +9,7 @@ export class FormValidator {
     this._errorClass = obj.errorClass;
     this._inputList = [...formElement.querySelectorAll(this._inputSelector)];
     this._buttonElement = formElement.querySelector(this._submitButtonSelector);
+    // console.log(this._inputList);
   }
 
   //Функция показа ошибки на input
@@ -81,9 +82,9 @@ export class FormValidator {
   }
 
   //Функция очистки полей ввода
-  resetInputs() {
-    this._inputList.forEach((inputElement) => {
-      inputElement.value = '';
-    });
-  }
+  // resetInputs() {
+  //   this._inputList.forEach((inputElement) => {
+  //     inputElement.value = '';
+  //   });
+  // }
 }
