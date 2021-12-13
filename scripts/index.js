@@ -1,47 +1,50 @@
 import { initialCards } from './utils/data.js';
 import { Card } from './Card.js';
-// import { openPopup, closePopup } from './utils/utils.js';
 import { obj } from './utils/settings.js';
 import { FormValidator } from './FormValidator.js';
 import { Section } from './Section.js';
 import { Popup } from './Popup.js';
 import { PopupWithImage } from './PopupWithImage.js';
 import { PopupWithForm } from './PopupWithForm.js';
+import { UserInfo } from './UserInfo.js';
 
 //Форма редактирования профиля
-// const popupSelectorProfile = document.querySelector('.popup_type_edit');
 const popupSelectorProfile1 = '.popup_type_edit';
-//Выборка кнопки закрытия
-// const popupCloseButtonFormProfile = document.querySelector('.popup__button-close');
-//Выборка кнопки открытия
+//Выборка кнопки открытия попапа профиля
 const popupOpenButtonFormProfile = document.querySelector('.profile__edit-button');
 //Выборка форм
 const formProfile = document.forms['form-edit'];
 const formCard = document.forms['form-card'];
 
-//Выборка текстовых элементов
-const nameElementFormProfile = document.querySelector('.profile__name');
-const descriptionElementFormProfile = document.querySelector('.profile__description');
+const nameElementFormProfile = '.profile__name';
+const descriptionElementFormProfile = '.profile__description';
 
-//Выборка input
+const userInfo = new UserInfo({ name: nameElementFormProfile, description: descriptionElementFormProfile });
+
+//Выборка input профиля
 const nameInput = formProfile.querySelector('.popup__input_type_name');
 const descriptionInput = formProfile.querySelector('.popup__input_type_description');
 
 //Выбираем весь popup
 const popupPic = document.querySelector('.popup_type_pic');
-//Выбираем кнопку закрытия
-// const popupPicCardCloseButton = popupPic.querySelector('.popup__button-close');
+
+//Достаем секцию element
+const elementSection = document.querySelector('.elements');
+//Достаем template
+const elementTemplate = document.querySelector('.element-template');
 
 //Создаем новый класс popup для профиля
 const popupFormProfile = new Popup(popupSelectorProfile1);
-//Событие 'Закрытие popup'
+// const popupFormProfile = new PopupWithForm(popupSelectorProfile1, submiter)
 popupFormProfile.setEventListeners();
 
+// const userInfo = new UserInfo({ nameElementFormProfile, descriptionElementFormProfile });
+
 //Функция наполнения полей (нужна при открытии)
-const fillPopup = () => {
-  nameInput.value = nameElementFormProfile.textContent;
-  descriptionInput.value = descriptionElementFormProfile.textContent;
-};
+// const fillPopup = () => {
+//   nameInput.value = nameElementFormProfile.textContent;
+//   descriptionInput.value = descriptionElementFormProfile.textContent;
+// };
 
 //Запускаем валидацию
 const formValidatorProfile = new FormValidator(obj, formProfile);
@@ -51,12 +54,13 @@ formValidatorProfile.enableValidation();
 function formSubmitHandler(evt) {
   //отменяет дефолтное поведение. Страница не перезагружается после отправки формы
   evt.preventDefault();
+  userInfo.setUserInfo(nameInput.value, descriptionInput.value);
   //Вытаскиваем текущие значения input
-  const nameInputValue = nameInput.value;
-  const descriptionInputValue = descriptionInput.value;
+  // const nameInputValue = nameInput.value;
+  // const descriptionInputValue = descriptionInput.value;
   //Вставляем текущие значения input в textContent html элементов
-  nameElementFormProfile.textContent = nameInputValue;
-  descriptionElementFormProfile.textContent = descriptionInputValue;
+  // nameElementFormProfile.textContent = nameInputValue;
+  // descriptionElementFormProfile.textContent = descriptionInputValue;
   //Закрываем форму
   popupFormProfile.close();
 }
@@ -64,24 +68,17 @@ function formSubmitHandler(evt) {
 //Событие 'Открытие popup'
 popupOpenButtonFormProfile.addEventListener('click', function () {
   popupFormProfile.open();
-  fillPopup();
+  // fillPopup();
+  const formElements = userInfo.getUserInfo();
+  nameInput.value = formElements.name;
+  descriptionInput.value = formElements.description;
   formValidatorProfile.resetValidation();
 });
-
-//Событие 'Закрытие popup'
-// popupCloseButtonFormProfile.addEventListener('click', () => {
-//   popupFormProfile.close();
-// });
 
 //Событие 'Клик по кнопке Сохранить'
 formProfile.addEventListener('submit', formSubmitHandler);
 
 //Наполнение дефолтными карточками
-//Достаем секцию element
-const elementSection = document.querySelector('.elements');
-//Достаем template
-const elementTemplate = document.querySelector('.element-template');
-
 const popupWithImageClass = new PopupWithImage('.popup_type_pic');
 popupWithImageClass.setEventListeners();
 
@@ -106,18 +103,6 @@ const cardList = new Section(
 //Запускаем дефолтное заполнение карточками.
 cardList.renderItems();
 
-//Функция добавления карточек на страницу
-// function renderCard() {
-//   initialCards.forEach((item) => {
-//     elementSection.prepend(generateCard(item, elementTemplate));
-//   });
-// }
-// renderCard();
-
-//Popup форма Card
-//Выборка формы и кнопок с ней связанных
-// const popupFormCard = document.querySelector('.popup_type_card');
-//!!!!!!!!!!!!!!!!
 const popupFormCard = '.popup_type_card';
 
 //Или вариант выборки формы:
@@ -134,10 +119,8 @@ const popupFormCardOpenElement = document.querySelector('.profile__add-button');
 const formValidatorCard = new FormValidator(obj, formCard);
 formValidatorCard.enableValidation();
 
-const PopupWithFormClass = new PopupWithForm(popupFormCard, {
-  submiter: (item) => {
-    elementSection.prepend(generateCard(item, elementTemplate));
-  },
+const PopupWithFormClass = new PopupWithForm(popupFormCard, (item) => {
+  elementSection.prepend(generateCard(item, elementTemplate));
 });
 
 PopupWithFormClass.setEventListeners();
@@ -146,10 +129,8 @@ PopupWithFormClass.setEventListeners();
 popupFormCardOpenElement.addEventListener('click', function () {
   PopupWithFormClass.open();
   formValidatorCard.resetValidation();
-  // formValidatorCard.resetInputs();
 });
 
-//Слушатель на закрытие
-// popupFormCardCloseElement.addEventListener('click', function () {
-//   popupFormCardClass.close();
-// });
+//Выборка текстовых элементов профиля
+// const nameElementFormProfile = document.querySelector('.profile__name');
+// const descriptionElementFormProfile = document.querySelector('.profile__description');
