@@ -1,1 +1,0 @@
-(()=>{const o=[2,3,5].map((o=>2*o));console.log(o)})();

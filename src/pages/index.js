@@ -1,11 +1,12 @@
-import { initialCards } from './utils/data.js';
-import { Card } from './components/Card.js';
-import { settings } from './utils/settings.js';
-import { FormValidator } from './components/FormValidator.js';
-import { Section } from './components/Section.js';
-import { PopupWithImage } from './components/PopupWithImage.js';
-import { PopupWithForm } from './components/PopupWithForm.js';
-import { UserInfo } from './components/UserInfo.js';
+import './index.css';
+import { initialCards } from '../scripts/utils/data.js';
+import { Card } from '../scripts/components/Card.js';
+import { settings } from '../scripts/utils/settings.js';
+import { FormValidator } from '../scripts/components/FormValidator.js';
+import { Section } from '../scripts/components/Section.js';
+import { PopupWithImage } from '../scripts/components/PopupWithImage.js';
+import { PopupWithForm } from '../scripts/components/PopupWithForm.js';
+import { UserInfo } from '../scripts/components/UserInfo.js';
 import {
   popupSelectorProfile,
   buttonOpenProfile,
@@ -19,7 +20,7 @@ import {
   elementTemplate,
   popupFormCard,
   buttonOpenFormCard,
-} from './utils/constants.js';
+} from '../scripts/utils/constants.js';
 
 //Создаем новый класс для профиля пользователя, будем использовать его методы для заполнения текстовых полей
 const userInfo = new UserInfo({ name: nameElementFormProfile, description: descriptionElementFormProfile });
@@ -82,7 +83,8 @@ formValidatorCard.enableValidation();
 //Создаем новый класс popup с формой добавления новой карточки и запускаем слушатели события для него
 const PopupWithFormClass = new PopupWithForm(popupFormCard, (item) => {
   //описываем callback функцию добавления новой карточки при submit
-  elementSection.prepend(generateCard(item, elementTemplate));
+  const card = generateCard(item, elementTemplate);
+  cardList.addItem(card);
 });
 PopupWithFormClass.setEventListeners();
 
