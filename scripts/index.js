@@ -1,39 +1,25 @@
 import { initialCards } from './utils/data.js';
 import { Card } from './components/Card.js';
-import { obj } from './utils/settings.js';
-import { FormValidator } from './FormValidator.js';
-import { Section } from './Section.js';
-import { PopupWithImage } from './PopupWithImage.js';
-import { PopupWithForm } from './PopupWithForm.js';
-import { UserInfo } from './UserInfo.js';
-
-//Выборка popup редактирования профиля
-const popupSelectorProfile = '.popup_type_edit';
-//Выборка кнопки открытия popup профиля
-const buttonOpenProfile = document.querySelector('.profile__edit-button');
-
-//Выборка форм
-const formProfile = document.forms['form-edit'];
-const formCard = document.forms['form-card'];
-
-//Выборка текстовых элементов профиля
-const nameElementFormProfile = '.profile__name';
-const descriptionElementFormProfile = '.profile__description';
-
-//Выборка input формы профиля
-const nameInput = formProfile.querySelector('.popup__input_type_name');
-const descriptionInput = formProfile.querySelector('.popup__input_type_description');
-
-//Выборка секции element
-const elementSection = document.querySelector('.elements');
-
-//Выборка template-шаблона
-const elementTemplate = document.querySelector('.element-template');
-
-//Выборка popup добавления карточки
-const popupFormCard = '.popup_type_card';
-//Выборка кнопки открытия popup добавления карточки
-const buttonOpenFormCard = document.querySelector('.profile__add-button');
+import { settings } from './utils/settings.js';
+import { FormValidator } from './components/FormValidator.js';
+import { Section } from './components/Section.js';
+import { PopupWithImage } from './components/PopupWithImage.js';
+import { PopupWithForm } from './components/PopupWithForm.js';
+import { UserInfo } from './components/UserInfo.js';
+import {
+  popupSelectorProfile,
+  buttonOpenProfile,
+  formProfile,
+  formCard,
+  nameElementFormProfile,
+  descriptionElementFormProfile,
+  nameInput,
+  descriptionInput,
+  elementSection,
+  elementTemplate,
+  popupFormCard,
+  buttonOpenFormCard,
+} from './utils/constants.js';
 
 //Создаем новый класс для профиля пользователя, будем использовать его методы для заполнения текстовых полей
 const userInfo = new UserInfo({ name: nameElementFormProfile, description: descriptionElementFormProfile });
@@ -46,7 +32,7 @@ const popupFormProfile = new PopupWithForm(popupSelectorProfile, () => {
 popupFormProfile.setEventListeners();
 
 //Запускаем валидацию формы профиля
-const formValidatorProfile = new FormValidator(obj, formProfile);
+const formValidatorProfile = new FormValidator(settings, formProfile);
 formValidatorProfile.enableValidation();
 
 //Открытие popup профиля
@@ -90,7 +76,7 @@ const cardList = new Section(
 cardList.renderItems();
 
 //Запускаем валидацию для формы добавления новой карточки
-const formValidatorCard = new FormValidator(obj, formCard);
+const formValidatorCard = new FormValidator(settings, formCard);
 formValidatorCard.enableValidation();
 
 //Создаем новый класс popup с формой добавления новой карточки и запускаем слушатели события для него
