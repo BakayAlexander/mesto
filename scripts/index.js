@@ -1,142 +1,93 @@
-//Прошу прощения, за сильные изменения в коде, я думал что проект уже готов и взялся за настройку Prettier. Кто ж знал, что я такой невнимательный и забыл пофиксить эллементарные вещи. И большое спасибо, за ревью, Михаил!
-
 import { initialCards } from './utils/data.js';
-import { Card } from './Card.js';
-import { openPopup, closePopup } from './utils/utils.js';
-import { obj } from './utils/settings.js';
-import { FormValidator } from './FormValidator.js';
+import { Card } from './components/Card.js';
+import { settings } from './utils/settings.js';
+import { FormValidator } from './components/FormValidator.js';
+import { Section } from './components/Section.js';
+import { PopupWithImage } from './components/PopupWithImage.js';
+import { PopupWithForm } from './components/PopupWithForm.js';
+import { UserInfo } from './components/UserInfo.js';
+import {
+  popupSelectorProfile,
+  buttonOpenProfile,
+  formProfile,
+  formCard,
+  nameElementFormProfile,
+  descriptionElementFormProfile,
+  nameInput,
+  descriptionInput,
+  elementSection,
+  elementTemplate,
+  popupFormCard,
+  buttonOpenFormCard,
+} from './utils/constants.js';
 
-//Форма редактирования профиля
-const popupFormProfile = document.querySelector('.popup_type_edit');
-//Выборка кнопки закрытия
-const popupCloseButtonFormProfile = document.querySelector('.popup__button-close');
-//Выборка кнопки открытия
-const popupOpenButtonFormProfile = document.querySelector('.profile__edit-button');
-//Выборка формы
-const formProfile = document.forms['form-edit'];
+//Создаем новый класс для профиля пользователя, будем использовать его методы для заполнения текстовых полей
+const userInfo = new UserInfo({ name: nameElementFormProfile, description: descriptionElementFormProfile });
 
-//Выборка текстовых элементов
-const nameElementFormProfile = document.querySelector('.profile__name');
-const descriptionElementFormProfile = document.querySelector('.profile__description');
+//Создаем новый класс для popup профиля
+const popupFormProfile = new PopupWithForm(popupSelectorProfile, () => {
+  userInfo.setUserInfo(nameInput.value, descriptionInput.value);
+});
+//Запускаем метод слушателей событий. Он реагирует на закрытие формы и ее submit.
+popupFormProfile.setEventListeners();
 
-//Выборка input
-const nameInput = formProfile.querySelector('.popup__input_type_name');
-const descriptionInput = formProfile.querySelector('.popup__input_type_description');
-
-//Функция наполнения полей (нужна при открытии)
-const fillPopup = () => {
-  nameInput.value = nameElementFormProfile.textContent;
-  descriptionInput.value = descriptionElementFormProfile.textContent;
-};
-
-//Запускаем валидацию
-const formValidatorProfile = new FormValidator(obj, popupFormProfile);
+//Запускаем валидацию формы профиля
+const formValidatorProfile = new FormValidator(settings, formProfile);
 formValidatorProfile.enableValidation();
 
-//Функция заполнения
-function formSubmitHandler(evt) {
-  //отменяет дефолтное поведение. Страница не перезагружается после отправки формы
-  evt.preventDefault();
-  //Вытаскиваем текущие значения input
-  const nameInputValue = nameInput.value;
-  const descriptionInputValue = descriptionInput.value;
-  //Вставляем текущие значения input в textContent html элементов
-  nameElementFormProfile.textContent = nameInputValue;
-  descriptionElementFormProfile.textContent = descriptionInputValue;
-  //Закрываем форму. Вызываем функцию и на вход передаем элемент, которому будет добавлен еще один класс
-  closePopup(popupFormProfile);
-}
-
-//Событие 'Открытие popup'
-popupOpenButtonFormProfile.addEventListener('click', function () {
-  openPopup(popupFormProfile);
-  fillPopup();
+//Открытие popup профиля
+buttonOpenProfile.addEventListener('click', function () {
+  //Вызываем метод открытия формы
+  popupFormProfile.open();
+  //Вызываем метод получения объекта с текстовыми значениями профиля
+  const formTextElements = userInfo.getUserInfo();
+  //Присваиваем значениям инпутов текущие данные профиля
+  nameInput.value = formTextElements.name;
+  descriptionInput.value = formTextElements.description;
+  //Перезагружаем ошибки и кнопку сохранения
   formValidatorProfile.resetValidation();
 });
 
-//Событие 'Закрытие popup'
-popupCloseButtonFormProfile.addEventListener('click', function () {
-  closePopup(popupFormProfile);
-});
-
-//Событие 'Клик по кнопке Сохранить'
-formProfile.addEventListener('submit', formSubmitHandler);
-
-//Наполнение дефолтными карточками
-//Достаем секцию element
-const elementSection = document.querySelector('.elements');
-//Достаем template
-const elementTemplate = document.querySelector('.element-template');
+//Создаем новый класс popup с картинкой и запускаем слушатели события для него
+const popupWithImageClass = new PopupWithImage('.popup_type_pic');
+popupWithImageClass.setEventListeners();
 
 //Функция генерации карточки из класса Card
 function generateCard(data, template) {
-  const card = new Card(data, template);
-  return card.createCard();
+  const card = new Card(data, template, () => {
+    //Описываем callback функцию для открытия popup с картинкой при клике на картинку
+    popupWithImageClass.open(data);
+  }).createCard();
+  return card;
 }
 
-//Функция добавления карточек на страницу
-function renderCard() {
-  initialCards.forEach((item) => {
-    elementSection.prepend(generateCard(item, elementTemplate));
-  });
-}
+//Наполнение дефолтными карточками
+const cardList = new Section(
+  {
+    items: initialCards,
+    renderer: (item) => {
+      const card = generateCard(item, elementTemplate);
+      cardList.addItem(card);
+    },
+  },
+  elementSection
+);
 //Запускаем дефолтное заполнение карточками.
-renderCard();
+cardList.renderItems();
 
-//Popup форма Card
-//Выборка формы и кнопок с ней связанных
-const popupFormCard = document.querySelector('.popup_type_card');
-//Или вариант выборки формы:
-// const popupFormCard = document.forms['form-card']
-const popupFormCardOpenElement = document.querySelector('.profile__add-button');
-const popupFormCardCloseElement = popupFormCard.querySelector('.popup__button-close');
-const popupFormCardSaveElement = popupFormCard.querySelector('.popup__button-save');
-
-//Запускаем валидацию
-const formValidatorCard = new FormValidator(obj, popupFormCard);
+//Запускаем валидацию для формы добавления новой карточки
+const formValidatorCard = new FormValidator(settings, formCard);
 formValidatorCard.enableValidation();
 
-//Слушатель на открытие
-popupFormCardOpenElement.addEventListener('click', function () {
-  openPopup(popupFormCard);
-  formValidatorCard.resetValidation();
-  formValidatorCard.resetInputs();
-});
-
-//Слушатель на закрытие
-popupFormCardCloseElement.addEventListener('click', function () {
-  closePopup(popupFormCard);
-});
-
-//Слушать на событие "Создать"
-popupFormCard.addEventListener('submit', function (evt) {
-  evt.preventDefault();
-  //Достаем значения инпутов внутри функции
-  const image = popupFormCard.querySelector('.popup__input_type_image-url');
-  const name = popupFormCard.querySelector('.popup__input_type_image-name');
-  const item = {
-    name: name.value,
-    image: image.value,
-  };
+//Создаем новый класс popup с формой добавления новой карточки и запускаем слушатели события для него
+const PopupWithFormClass = new PopupWithForm(popupFormCard, (item) => {
+  //описываем callback функцию добавления новой карточки при submit
   elementSection.prepend(generateCard(item, elementTemplate));
-  //Обнуляем значения инпутов, дабы при открытии они не сохранялись
-  name.value = '';
-  image.value = '';
-  //Закрываем форму после нажатия кнопки (Создать)
-  closePopup(popupFormCard);
-  //Деактивируем кнопку (Создать)
-  popupFormCardSaveElement.disabled = true;
-  popupFormCardSaveElement.classList.add('popup__button-save_disabled');
 });
+PopupWithFormClass.setEventListeners();
 
-//Popup  с картинкой
-
-//Выбираем весь popup
-const popupPic = document.querySelector('.popup_type_pic');
-//Выбираем кнопку закрытия
-const popupPicCardCloseButton = popupPic.querySelector('.popup__button-close');
-
-//Слушатель на закрытие
-popupPicCardCloseButton.addEventListener('click', function () {
-  closePopup(popupPic);
+//Открытие popup формы добавления новой карточки
+buttonOpenFormCard.addEventListener('click', function () {
+  PopupWithFormClass.open();
+  formValidatorCard.resetValidation();
 });
