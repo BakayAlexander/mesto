@@ -26,8 +26,9 @@ import {
 const userInfo = new UserInfo({ name: nameElementFormProfile, description: descriptionElementFormProfile });
 
 //Создаем новый класс для popup профиля
-const popupFormProfile = new PopupWithForm(popupSelectorProfile, () => {
-  userInfo.setUserInfo(nameInput.value, descriptionInput.value);
+const popupFormProfile = new PopupWithForm(popupSelectorProfile, (values) => {
+  //Передаем значения input в значения формы профиля
+  userInfo.setUserInfo(values);
 });
 //Запускаем метод слушателей событий. Он реагирует на закрытие формы и ее submit.
 popupFormProfile.setEventListeners();

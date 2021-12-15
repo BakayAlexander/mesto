@@ -12,8 +12,8 @@ export class UserInfo {
     return obj;
   }
 
-  setUserInfo(inputName, inputDescrition) {
-    this._name.textContent = inputName;
-    this._description.textContent = inputDescrition;
+  setUserInfo({ fullname, description }) {
+    this._name.textContent = fullname;
+    this._description.textContent = description;
   }
 }
