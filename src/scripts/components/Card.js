@@ -12,11 +12,9 @@ export class Card {
   }
 
   _setEventListeners() {
-    this._elementCard = this._getTempalte();
     this._elementCard.querySelector('.element__like-button').addEventListener('click', this._handleLike);
     this._elementCard.querySelector('.element__delete-button').addEventListener('click', this._handleDelete);
-    const elementPic = this._elementCard.querySelector('.element__pic');
-    elementPic.addEventListener('click', () => {
+    this._cardImage.addEventListener('click', () => {
       this.handleCardClick();
     });
   }
@@ -31,10 +29,12 @@ export class Card {
 
   createCard = () => {
     this._elementCard = this._getTempalte();
+    this._cardImage = this._elementCard.querySelector('.element__pic');
+    this._cardName = this._elementCard.querySelector('.element__name');
     this._setEventListeners();
-    this._elementCard.querySelector('.element__name').textContent = this._name;
-    this._elementCard.querySelector('.element__pic').src = this._image;
-    this._elementCard.querySelector('.element__pic').alt = this._name;
+    this._cardName.textContent = this._name;
+    this._cardImage.src = this._image;
+    this._cardImage.alt = this._name;
     return this._elementCard;
   };
 }

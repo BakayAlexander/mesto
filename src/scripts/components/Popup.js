@@ -22,8 +22,7 @@ export class Popup {
   };
 
   _handleOverlayClose = (evt) => {
-    const popup = document.querySelector('.popup_is-opened');
-    if (evt.target === popup) {
+    if (evt.target === evt.currentTarget) {
       this.close();
     }
   };
