@@ -7,9 +7,10 @@ export const buttonOpenProfile = document.querySelector('.profile__edit-button')
 export const formProfile = document.forms['form-edit'];
 export const formCard = document.forms['form-card'];
 
-//Выборка текстовых элементов профиля
+//Выборка элементов профиля
 export const nameElementFormProfile = '.profile__name';
 export const descriptionElementFormProfile = '.profile__description';
+export const picElementFormProfile = '.profile__pic';
 
 //Выборка input формы профиля
 export const nameInput = formProfile.querySelector('.popup__input_type_name');
