@@ -118,12 +118,62 @@
         </div>
       </div>
     </div>
+    <div class="popup popup_type_avatar">
+      <div class="popup__container">
+        <h2 class="popup__title">Обновить аватар</h2>
+        <form name="form-avatar" class="popup__form" novalidate>
+          <fieldset class="popup__inputs">
+            <input
+              class="popup__input popup__input_type_avatar"
+              id="type_avatar"
+              type="url"
+              placeholder="Ссылка на аватар"
+              name="link"
+              value=""
+              required
+              minlength="2"
+              maxlength="200"
+              autocomplete="off"
+            />
+            <span class="popup__input-error popup__input-error_type_avatar"></span>
+          </fieldset>
+          <button class="popup__button-save" type="submit">Сохранить</button>
+        </form>
+        <button class="popup__button-close" type="button" aria-label="Закрыть"></button>
+      </div>
+      <div class="popup popup_type_card-delete">
+        <div class="popup__container">
+          <h2 class="popup__title">Вы уверены?</h2>
+          <form name="form-avatar" class="popup__form" novalidate>
+            <!-- <fieldset class="popup__inputs">
+              <input
+                class="popup__input popup__input_type_avatar"
+                id="type_avatar"
+                type="url"
+                placeholder="Ссылка на аватар"
+                name="link"
+                value=""
+                required
+                minlength="2"
+                maxlength="200"
+                autocomplete="off"
+              />
+              <span class="popup__input-error popup__input-error_type_avatar"></span>
+            </fieldset> -->
+            <button class="popup__button-save" type="submit">Да</button>
+          </form>
+          <button class="popup__button-close" type="button" aria-label="Закрыть"></button>
+        </div>
+    </div>
     <template class="element-template">
       <article class="element">
         <img class="element__pic" src=" " alt="Фотография добавленная пользователем" />
         <div class="element__container">
           <h2 class="element__name"></h2>
-          <button class="element__like-button" type="button" aria-label="Отметить понравившимся"></button>
+          <div class="element__like-container">
+            <button class="element__like-button" type="button" aria-label="Отметить понравившимся"></button>
+            <span class="element__like-count"></span>
+          </div>
         </div>
         <button class="element__delete-button" type="button" aria-label="Удалить карточку"></button>
       </article>

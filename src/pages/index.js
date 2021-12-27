@@ -21,8 +21,13 @@ import {
   popupFormCard,
   buttonOpenFormCard,
   picElementFormProfile,
+  popupFormAvatar,
+  buttonOpenFormAvatar,
+  formAvatar,
+  popupCardDelete,
 } from '../scripts/utils/constants.js';
 import { Api } from '../scripts/components/Api';
+import { PopupWithSubmit } from '../scripts/components/PopupWithSubmit';
 
 //Создаем новый класс для профиля пользователя, будем использовать его методы для заполнения текстовых полей
 const userInfo = new UserInfo({
@@ -40,13 +45,6 @@ const api = new Api({
   },
 });
 
-// api.editProfile();
-// const testCard = api.addNewCard({
-//   name: 'Архыз',
-//   link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
-// });
-// console.log(testCard);
-
 //Подгружаем из API данные пользователя
 const profileData = api.getProfileData();
 profileData
@@ -60,16 +58,11 @@ profileData
 //Создаем новый класс для popup профиля
 const popupFormProfile = new PopupWithForm(popupSelectorProfile, (values) => {
   //Передаем значения input в значения формы профиля
-  // userInfo.setUserInfo(values);
-  // console.log(values);
-  // api.editProfile().then((res) => {
-  //   userInfo.setUserInfo(values);
-  // });
   api.editProfile(values.fullname, values.description).then((res) => {
-    console.log(res.name);
-    userInfo.setUserInfo({ fullname: res.name, description: res.about });
+    userInfo.setUserInfo({ fullname: res.name, description: res.about, avatar: res.avatar });
   });
 });
+
 //Запускаем метод слушателей событий. Он реагирует на закрытие формы и ее submit.
 popupFormProfile.setEventListeners();
 
@@ -95,12 +88,51 @@ const popupWithImageClass = new PopupWithImage('.popup_type_pic');
 popupWithImageClass.setEventListeners();
 
 //Функция генерации карточки из класса Card
+
+// function generateCard(data, template) {
+//   const card = new Card(data, template, () => {
+//     //Описываем callback функцию для открытия popup с картинкой при клике на картинку
+//     popupWithImageClass.open(data);
+//   }).createCard();
+//   return card;
+// }
+
 function generateCard(data, template) {
-  const card = new Card(data, template, () => {
-    //Описываем callback функцию для открытия popup с картинкой при клике на картинку
-    popupWithImageClass.open(data);
-  }).createCard();
-  return card;
+  const card = new Card(
+    {
+      data,
+      handleCardClick: () => {
+        //Описываем callback функцию для открытия popup с картинкой при клике на картинку
+        popupWithImageClass.open(data);
+      },
+      handleLikeClickActive: () => {
+        api
+          .putCardLikes(data._id)
+          .then((res) => {
+            //Счетчик лайков!!!!!!!
+            // console.log(res.likes.length);
+            // const template = document.querySelector('.element__like-count');
+            // template.textContent = res.likes.length;
+            // console.log(template.textContent);
+            card.countLikes(res.likes.length);
+          })
+          .finally(() => {});
+      },
+      handleLikeClickDeactive: () => {
+        api.deleteCardLikes(data._id).then((res) => {
+          // console.log(res);
+          card.countLikes(res.likes.length);
+        });
+      },
+      handleDeleteClick: () => {
+        api.deleteCard(data._id).then(() => {
+          card.handleDelete();
+        });
+      },
+    },
+    template
+  );
+  return card.createCard();
 }
 
 //Заполняем из API карточки
@@ -127,8 +159,10 @@ formValidatorCard.enableValidation();
 //Создаем новый класс popup с формой добавления новой карточки и запускаем слушатели события для него
 const popupFormCardClass = new PopupWithForm(popupFormCard, (item) => {
   //описываем callback функцию добавления новой карточки при submit
-  const card = generateCard(item, elementTemplate);
-  cardList.addItem(card);
+  api.addNewCard(item.name, item.image).then((res) => {});
+  //!!!!!!!!!!!
+  // const card = generateCard(item, elementTemplate);
+  // cardList.addItem(card);
 });
 popupFormCardClass.setEventListeners();
 
@@ -137,3 +171,30 @@ buttonOpenFormCard.addEventListener('click', function () {
   popupFormCardClass.open();
   formValidatorCard.resetValidation();
 });
+
+//Запускаем валидацию для формы добавления новой карточки
+const formValidatorAvatar = new FormValidator(settings, formAvatar);
+formValidatorAvatar.enableValidation();
+
+//Создаем новый класс для popup аватара
+const popupFormAvatarClass = new PopupWithForm(popupFormAvatar, (values) => {
+  api.editAvatar(values.link).then((res) => {
+    userInfo.setUserInfo({ fullname: res.name, description: res.about, avatar: res.avatar });
+  });
+});
+
+popupFormAvatarClass.setEventListeners();
+
+//Открытие popup формы изменения аватара
+buttonOpenFormAvatar.addEventListener('click', function () {
+  popupFormAvatarClass.open();
+});
+
+// const deleteCardClass = new PopupWithSubmit(popupCardDelete);
+// const buttonCardDelete = document.querySelector('.element__delete-button');
+// buttonCardDelete.addEventListener('click', () => {
+//   deleteCardClass.open();
+// });
+
+// const testInfo = userInfo.getUserInfo();
+// console.log(testInfo);
