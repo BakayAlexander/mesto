@@ -118,15 +118,15 @@ export class Api {
     });
   }
 
-  getCardLikes(id) {
-    return fetch(`${this._url}cards/${id}/likes`, {
-      method: 'GET',
-      headers: this._headers,
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(res.status);
-    });
-  }
+  // getCardLikes(id) {
+  //   return fetch(`${this._url}cards/${id}/likes`, {
+  //     method: 'GET',
+  //     headers: this._headers,
+  //   }).then((res) => {
+  //     if (res.ok) {
+  //       return res.json();
+  //     }
+  //     return Promise.reject(res.status);
+  //   });
+  // }
 }

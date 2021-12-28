@@ -29,6 +29,9 @@ import {
 import { Api } from '../scripts/components/Api';
 import { PopupWithSubmit } from '../scripts/components/PopupWithSubmit';
 
+//В эту переменную позже запишется id пользователя
+let userId;
+
 //Создаем новый класс для профиля пользователя, будем использовать его методы для заполнения текстовых полей
 const userInfo = new UserInfo({
   name: nameElementFormProfile,
@@ -47,9 +50,19 @@ const api = new Api({
 
 //Подгружаем из API данные пользователя
 const profileData = api.getProfileData();
+
+//Подгружаем из API данные карточки
+const cardsData = api.getCardsData();
+
+//Записываем в переменную id пользователя
+Promise.all([cardsData, profileData]).then((res) => {
+  userId = res[1]._id;
+});
+
 profileData
   .then((data) => {
     userInfo.setUserInfo({ fullname: data.name, description: data.about, avatar: data.avatar });
+    userId = data._id;
   })
   .catch((err) => {
     alert(`Возникла ошибка: ${err}`);
@@ -88,15 +101,6 @@ const popupWithImageClass = new PopupWithImage('.popup_type_pic');
 popupWithImageClass.setEventListeners();
 
 //Функция генерации карточки из класса Card
-
-// function generateCard(data, template) {
-//   const card = new Card(data, template, () => {
-//     //Описываем callback функцию для открытия popup с картинкой при клике на картинку
-//     popupWithImageClass.open(data);
-//   }).createCard();
-//   return card;
-// }
-
 function generateCard(data, template) {
   const card = new Card(
     {
@@ -106,21 +110,12 @@ function generateCard(data, template) {
         popupWithImageClass.open(data);
       },
       handleLikeClickActive: () => {
-        api
-          .putCardLikes(data._id)
-          .then((res) => {
-            //Счетчик лайков!!!!!!!
-            // console.log(res.likes.length);
-            // const template = document.querySelector('.element__like-count');
-            // template.textContent = res.likes.length;
-            // console.log(template.textContent);
-            card.countLikes(res.likes.length);
-          })
-          .finally(() => {});
+        api.putCardLikes(data._id).then((res) => {
+          card.countLikes(res.likes.length);
+        });
       },
       handleLikeClickDeactive: () => {
         api.deleteCardLikes(data._id).then((res) => {
-          // console.log(res);
           card.countLikes(res.likes.length);
         });
       },
@@ -130,13 +125,14 @@ function generateCard(data, template) {
         });
       },
     },
-    template
+    template,
+    userId
+    // '5a8bd8f85ebde1a5f957c78f'
   );
   return card.createCard();
 }
 
 //Заполняем из API карточки
-const cardsData = api.getCardsData();
 cardsData.then((data) => {
   const cardList = new Section(
     {
@@ -148,6 +144,7 @@ cardsData.then((data) => {
     },
     elementSection
   );
+
   //Запускаем дефолтное заполнение карточками.
   cardList.renderItems();
 });
@@ -159,10 +156,10 @@ formValidatorCard.enableValidation();
 //Создаем новый класс popup с формой добавления новой карточки и запускаем слушатели события для него
 const popupFormCardClass = new PopupWithForm(popupFormCard, (item) => {
   //описываем callback функцию добавления новой карточки при submit
-  api.addNewCard(item.name, item.image).then((res) => {});
-  //!!!!!!!!!!!
-  // const card = generateCard(item, elementTemplate);
-  // cardList.addItem(card);
+  api.addNewCard(item.name, item.link).then((res) => {
+    const card = generateCard(res, elementTemplate);
+    elementSection.append(card);
+  });
 });
 popupFormCardClass.setEventListeners();
 
