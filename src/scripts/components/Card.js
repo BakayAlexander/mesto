@@ -73,7 +73,6 @@ export class Card {
   _addLikes(userId) {
     this._likes.forEach((like) => {
       if (like._id === userId) {
-        console.log('Hey!');
         this._elementCard.querySelector('.element__like-button').classList.add('element__like-button_acive');
       }
     });

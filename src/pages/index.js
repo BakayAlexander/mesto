@@ -25,6 +25,7 @@ import {
   buttonOpenFormAvatar,
   formAvatar,
   popupCardDelete,
+  formDelete,
 } from '../scripts/utils/constants.js';
 import { Api } from '../scripts/components/Api';
 import { PopupWithSubmit } from '../scripts/components/PopupWithSubmit';
@@ -71,9 +72,14 @@ profileData
 //Создаем новый класс для popup профиля
 const popupFormProfile = new PopupWithForm(popupSelectorProfile, (values) => {
   //Передаем значения input в значения формы профиля
-  api.editProfile(values.fullname, values.description).then((res) => {
-    userInfo.setUserInfo({ fullname: res.name, description: res.about, avatar: res.avatar });
-  });
+  api
+    .editProfile(values.fullname, values.description)
+    .then((res) => {
+      userInfo.setUserInfo({ fullname: res.name, description: res.about, avatar: res.avatar });
+    })
+    .catch((err) => {
+      alert(`Возникла ошибка: ${err}`);
+    });
 });
 
 //Запускаем метод слушателей событий. Он реагирует на закрытие формы и ее submit.
@@ -100,6 +106,10 @@ buttonOpenProfile.addEventListener('click', function () {
 const popupWithImageClass = new PopupWithImage('.popup_type_pic');
 popupWithImageClass.setEventListeners();
 
+//Создаем новый класс popup с submit (для удаления карточки)
+const popupWithSubmitClass = new PopupWithSubmit(popupCardDelete);
+popupWithSubmitClass.setEventListeners();
+
 //Функция генерации карточки из класса Card
 function generateCard(data, template) {
   const card = new Card(
@@ -120,8 +130,17 @@ function generateCard(data, template) {
         });
       },
       handleDeleteClick: () => {
-        api.deleteCard(data._id).then(() => {
-          card.handleDelete();
+        popupWithSubmitClass.open();
+        popupWithSubmitClass.submit(() => {
+          //удаляя карточку посылаем запрос на сервер и в случае положительного ответа удаляем из разметки
+          api
+            .deleteCard(data._id)
+            .then(() => {
+              card.handleDelete();
+            })
+            .catch((err) => {
+              alert(`Возникла ошибка: ${err}`);
+            });
         });
       },
     },

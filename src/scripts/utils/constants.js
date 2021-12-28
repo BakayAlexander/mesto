@@ -7,6 +7,7 @@ export const buttonOpenProfile = document.querySelector('.profile__edit-button')
 export const formProfile = document.forms['form-edit'];
 export const formCard = document.forms['form-card'];
 export const formAvatar = document.forms['form-avatar'];
+export const formDelete = document.forms['form-delete'];
 
 //Выборка элементов профиля
 export const nameElementFormProfile = '.profile__name';
