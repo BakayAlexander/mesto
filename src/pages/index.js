@@ -54,6 +54,7 @@ const profileData = api.getProfileData();
 //Подгружаем из API данные карточки
 const cardsData = api.getCardsData();
 
+//Заполним профиль пользователя данными пришедшими из API
 profileData
   .then((data) => {
     userInfo.setUserInfo({ fullname: data.name, description: data.about, avatar: data.avatar });
@@ -66,9 +67,10 @@ profileData
 
 //Создаем новый класс для popup профиля
 const popupFormProfile = new PopupWithForm(popupSelectorProfile, (values) => {
+  //Описываем что будет происходить при submit формы, это сабмитер/хендлер
   //Для начала в кнопке сохранения меняем текст на "Загрузка..."
   renderLoading(popupSelectorProfile, true);
-  //Передаем значения input в значения формы профиля
+  //Передаем значения input в API запрос patch и после этого обновляем информацию на странице
   api
     .editProfile(values.fullname, values.description)
     .then((res) => {
@@ -121,6 +123,7 @@ function generateCard(data, template) {
         popupWithImageClass.open(data);
       },
       handleLikeClickActive: () => {
+        //Описываем callback функцию постановки лайков. Вначале отправляем API запрос на установку лайка, потом отправляем API запрос на пересчет лайков
         api
           .putCardLikes(data._id)
           .then((res) => {
@@ -131,6 +134,7 @@ function generateCard(data, template) {
           });
       },
       handleLikeClickDeactive: () => {
+        //Описываем callback функцию снятия лайков.
         api
           .deleteCardLikes(data._id)
           .then((res) => {
@@ -141,6 +145,7 @@ function generateCard(data, template) {
           });
       },
       handleDeleteClick: () => {
+        //Описываем callback функцию удаления карточки. Вначале открываем форму подтверджения удаления и затем динамически определяем, что будет происходить при ее submit.
         popupWithSubmitClass.open();
         popupWithSubmitClass.submit(() => {
           //удаляя карточку посылаем запрос на сервер и в случае положительного ответа удаляем из разметки
@@ -171,6 +176,7 @@ Promise.all([cardsData, profileData]).then((res) => {
         {
           items: data,
           renderer: (item) => {
+            //При создании карточки передаем не только массив данных и селектор шаблона, но и id пользователя ее создавшего
             const card = generateCard(item, elementTemplate, userId);
             cardList.addItem(card);
           },
@@ -214,6 +220,7 @@ popupFormCardClass.setEventListeners();
 //Открытие popup формы добавления новой карточки
 buttonOpenFormCard.addEventListener('click', function () {
   popupFormCardClass.open();
+  //Очищаем ошибки инпутов и деактивируем кнопку сохранения
   formValidatorCard.resetValidation();
 });
 
@@ -225,6 +232,7 @@ formValidatorAvatar.enableValidation();
 const popupFormAvatarClass = new PopupWithForm(popupFormAvatar, (values) => {
   //Для начала в кнопке сохранения меняем текст на "Загрузка..."
   renderLoading(popupFormAvatar, true);
+  //Посылаем запрос на замену аватара и затем меняем его непосредственно на нашей страничке
   api
     .editAvatar(values.link)
     .then((res) => {
@@ -242,5 +250,7 @@ popupFormAvatarClass.setEventListeners();
 
 //Открытие popup формы изменения аватара
 buttonOpenFormAvatar.addEventListener('click', function () {
+  //Перезапустим валидацию для очистки ошибок и деактивации кнопки
+  formValidatorAvatar.resetValidation();
   popupFormAvatarClass.open();
 });

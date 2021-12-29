@@ -5,6 +5,7 @@ export class PopupWithSubmit extends Popup {
     super(popupSelector);
   }
 
+  //Этим публичным методом мы будем задавать в index какие действия предпринять при сабмите
   submit(submiter) {
     this._submiter = submiter;
   }

@@ -16,10 +16,7 @@ export class Api {
     return fetch(`${this._url}users/me`, {
       headers: this._headers,
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(res.status);
+      return this._prepareDate(res);
     });
   }
 
@@ -32,10 +29,7 @@ export class Api {
         about: about,
       }),
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(res.status);
+      return this._prepareDate(res);
     });
   }
 
@@ -47,10 +41,7 @@ export class Api {
         avatar: avatar,
       }),
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(res.status);
+      return this._prepareDate(res);
     });
   }
 
@@ -58,10 +49,7 @@ export class Api {
     return fetch(`${this._url}cards`, {
       headers: this._headers,
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(res.status);
+      return this._prepareDate(res);
     });
   }
 
@@ -74,10 +62,7 @@ export class Api {
         link: link,
       }),
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(res.status);
+      return this._prepareDate(res);
     });
   }
 
@@ -86,10 +71,7 @@ export class Api {
       method: 'DELETE',
       headers: this._headers,
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(res.status);
+      return this._prepareDate(res);
     });
   }
   0;
@@ -99,10 +81,7 @@ export class Api {
       method: 'PUT',
       headers: this._headers,
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(res.status);
+      return this._prepareDate(res);
     });
   }
 
@@ -111,22 +90,7 @@ export class Api {
       method: 'DELETE',
       headers: this._headers,
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(res.status);
+      return this._prepareDate(res);
     });
   }
-
-  // getCardLikes(id) {
-  //   return fetch(`${this._url}cards/${id}/likes`, {
-  //     method: 'GET',
-  //     headers: this._headers,
-  //   }).then((res) => {
-  //     if (res.ok) {
-  //       return res.json();
-  //     }
-  //     return Promise.reject(res.status);
-  //   });
-  // }
 }
