@@ -1,0 +1,13 @@
+.profile__pic-button {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  background: url('../../../images/edit_button.svg');
+  background-size: 26px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
