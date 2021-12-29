@@ -1,0 +1,10 @@
+.profile__pic-container {
+  position: relative;
+  width: 120px;
+  border-radius: 50%;
+  height: 120px;
+}
+
+.profile__pic-container:hover .profile__pic {
+  opacity: 0.3;
+}
