@@ -1,5 +1,4 @@
 import './index.css';
-import { initialCards } from '../scripts/utils/data.js';
 import { Card } from '../scripts/components/Card.js';
 import { settings } from '../scripts/utils/settings.js';
 import { FormValidator } from '../scripts/components/FormValidator.js';
@@ -25,10 +24,10 @@ import {
   buttonOpenFormAvatar,
   formAvatar,
   popupCardDelete,
-  formDelete,
 } from '../scripts/utils/constants.js';
 import { Api } from '../scripts/components/Api';
 import { PopupWithSubmit } from '../scripts/components/PopupWithSubmit';
+import { renderLoading } from '../scripts/utils/utils.js';
 
 //В эту переменную позже запишется id пользователя
 let userId;
@@ -67,6 +66,8 @@ profileData
 
 //Создаем новый класс для popup профиля
 const popupFormProfile = new PopupWithForm(popupSelectorProfile, (values) => {
+  //Для начала в кнопке сохранения меняем текст на "Загрузка..."
+  renderLoading(popupSelectorProfile, true);
   //Передаем значения input в значения формы профиля
   api
     .editProfile(values.fullname, values.description)
@@ -75,6 +76,10 @@ const popupFormProfile = new PopupWithForm(popupSelectorProfile, (values) => {
     })
     .catch((err) => {
       alert(`Возникла ошибка: ${err}`);
+    })
+    .finally(() => {
+      //В любом случае возвращаем текст сохранения к стандартному состоянию
+      renderLoading(popupSelectorProfile, false);
     });
 });
 
@@ -188,6 +193,8 @@ formValidatorCard.enableValidation();
 //Создаем новый класс popup с формой добавления новой карточки и запускаем слушатели события для него
 const popupFormCardClass = new PopupWithForm(popupFormCard, (item) => {
   //описываем callback функцию добавления новой карточки при submit
+  //Для начала в кнопке сохранения меняем текст на "Загрузка..."
+  renderLoading(popupFormCard, true);
   api
     .addNewCard(item.name, item.link)
     .then((res) => {
@@ -196,6 +203,10 @@ const popupFormCardClass = new PopupWithForm(popupFormCard, (item) => {
     })
     .catch((err) => {
       alert(`Возникла ошибка: ${err}`);
+    })
+    .finally(() => {
+      //В любом случае возвращаем текст сохранения к стандартному состоянию
+      renderLoading(popupFormCard, false);
     });
 });
 popupFormCardClass.setEventListeners();
@@ -212,6 +223,8 @@ formValidatorAvatar.enableValidation();
 
 //Создаем новый класс для popup аватара
 const popupFormAvatarClass = new PopupWithForm(popupFormAvatar, (values) => {
+  //Для начала в кнопке сохранения меняем текст на "Загрузка..."
+  renderLoading(popupFormAvatar, true);
   api
     .editAvatar(values.link)
     .then((res) => {
@@ -219,6 +232,9 @@ const popupFormAvatarClass = new PopupWithForm(popupFormAvatar, (values) => {
     })
     .catch((err) => {
       alert(`Возникла ошибка: ${err}`);
+    })
+    .finally(() => {
+      renderLoading(popupFormAvatar, false);
     });
 });
 

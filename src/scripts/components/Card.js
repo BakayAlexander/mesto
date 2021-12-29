@@ -33,21 +33,14 @@ export class Card {
         this.handleLikeClickActive();
       }
     });
-    this._elementCard.querySelector('.element__delete-button').addEventListener('click', this.handleDeleteClick);
     this._cardImage.addEventListener('click', () => {
       this.handleCardClick();
     });
+    //Добавим проверку условия,чтобы не навешивать слушатель на чужие карточки
+    if (this._userId === this._ownerId) {
+      this._elementCard.querySelector('.element__delete-button').addEventListener('click', this.handleDeleteClick);
+    }
   }
-
-  // handleLikeActive = () => {
-  //   this._elementCard.querySelector('.element__like-button').classList.add('element__like-button_acive');
-  // };
-
-  // handleLikeDelete = () => {
-  //   this._elementCard.querySelector('.element__like-button').classList.remove('element__like-button_acive');
-  // };
-
-  // handleLikeActive;
 
   handleDelete() {
     this._elementCard.remove();
