@@ -55,15 +55,11 @@ const profileData = api.getProfileData();
 //Подгружаем из API данные карточки
 const cardsData = api.getCardsData();
 
-//Записываем в переменную id пользователя
-Promise.all([cardsData, profileData]).then((res) => {
-  userId = res[1]._id;
-});
-
 profileData
   .then((data) => {
     userInfo.setUserInfo({ fullname: data.name, description: data.about, avatar: data.avatar });
-    userId = data._id;
+    //Записываем в переменную id пользователя (альтернативный метод)
+    // userId = data._id;
   })
   .catch((err) => {
     alert(`Возникла ошибка: ${err}`);
@@ -120,14 +116,24 @@ function generateCard(data, template) {
         popupWithImageClass.open(data);
       },
       handleLikeClickActive: () => {
-        api.putCardLikes(data._id).then((res) => {
-          card.countLikes(res.likes.length);
-        });
+        api
+          .putCardLikes(data._id)
+          .then((res) => {
+            card.countLikes(res.likes.length);
+          })
+          .catch((err) => {
+            alert(`Возникла ошибка: ${err}`);
+          });
       },
       handleLikeClickDeactive: () => {
-        api.deleteCardLikes(data._id).then((res) => {
-          card.countLikes(res.likes.length);
-        });
+        api
+          .deleteCardLikes(data._id)
+          .then((res) => {
+            card.countLikes(res.likes.length);
+          })
+          .catch((err) => {
+            alert(`Возникла ошибка: ${err}`);
+          });
       },
       handleDeleteClick: () => {
         popupWithSubmitClass.open();
@@ -146,26 +152,33 @@ function generateCard(data, template) {
     },
     template,
     userId
-    // '5a8bd8f85ebde1a5f957c78f'
   );
   return card.createCard();
 }
 
-//Заполняем из API карточки
-cardsData.then((data) => {
-  const cardList = new Section(
-    {
-      items: data,
-      renderer: (item) => {
-        const card = generateCard(item, elementTemplate);
-        cardList.addItem(card);
-      },
-    },
-    elementSection
-  );
+//Записываем в переменную id пользователя (для того чтобы определить like на карточках и принадлежность карточек). Получаем id и только потом можем выгрузить карточки из API и отрисовать их на странице.
+Promise.all([cardsData, profileData]).then((res) => {
+  userId = res[1]._id;
+  //Заполняем из API карточки
+  cardsData
+    .then((data) => {
+      const cardList = new Section(
+        {
+          items: data,
+          renderer: (item) => {
+            const card = generateCard(item, elementTemplate, userId);
+            cardList.addItem(card);
+          },
+        },
+        elementSection
+      );
 
-  //Запускаем дефолтное заполнение карточками.
-  cardList.renderItems();
+      //Запускаем дефолтное заполнение карточками.
+      cardList.renderItems();
+    })
+    .catch((err) => {
+      alert(`Возникла ошибка: ${err}`);
+    });
 });
 
 //Запускаем валидацию для формы добавления новой карточки
@@ -175,10 +188,15 @@ formValidatorCard.enableValidation();
 //Создаем новый класс popup с формой добавления новой карточки и запускаем слушатели события для него
 const popupFormCardClass = new PopupWithForm(popupFormCard, (item) => {
   //описываем callback функцию добавления новой карточки при submit
-  api.addNewCard(item.name, item.link).then((res) => {
-    const card = generateCard(res, elementTemplate);
-    elementSection.append(card);
-  });
+  api
+    .addNewCard(item.name, item.link)
+    .then((res) => {
+      const card = generateCard(res, elementTemplate);
+      elementSection.append(card);
+    })
+    .catch((err) => {
+      alert(`Возникла ошибка: ${err}`);
+    });
 });
 popupFormCardClass.setEventListeners();
 
@@ -194,9 +212,14 @@ formValidatorAvatar.enableValidation();
 
 //Создаем новый класс для popup аватара
 const popupFormAvatarClass = new PopupWithForm(popupFormAvatar, (values) => {
-  api.editAvatar(values.link).then((res) => {
-    userInfo.setUserInfo({ fullname: res.name, description: res.about, avatar: res.avatar });
-  });
+  api
+    .editAvatar(values.link)
+    .then((res) => {
+      userInfo.setUserInfo({ fullname: res.name, description: res.about, avatar: res.avatar });
+    })
+    .catch((err) => {
+      alert(`Возникла ошибка: ${err}`);
+    });
 });
 
 popupFormAvatarClass.setEventListeners();
@@ -205,12 +228,3 @@ popupFormAvatarClass.setEventListeners();
 buttonOpenFormAvatar.addEventListener('click', function () {
   popupFormAvatarClass.open();
 });
-
-// const deleteCardClass = new PopupWithSubmit(popupCardDelete);
-// const buttonCardDelete = document.querySelector('.element__delete-button');
-// buttonCardDelete.addEventListener('click', () => {
-//   deleteCardClass.open();
-// });
-
-// const testInfo = userInfo.getUserInfo();
-// console.log(testInfo);

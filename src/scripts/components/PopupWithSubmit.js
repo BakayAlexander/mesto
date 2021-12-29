@@ -10,8 +10,9 @@ export class PopupWithSubmit extends Popup {
   }
 
   setEventListeners() {
-    const form = this._popup.querySelector('.popup__form');
-    form.addEventListener('submit', (evt) => {
+    super.setEventListeners();
+    //за счет всплытия события его можно отловить не только на форме, но и на popup
+    this._popup.addEventListener('submit', (evt) => {
       evt.preventDefault();
       this._submiter();
       this.close();

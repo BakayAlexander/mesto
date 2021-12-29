@@ -14,6 +14,7 @@ export class Card {
     this.handleLikeClickDeactive = handleLikeClickDeactive;
     this.handleDeleteClick = handleDeleteClick;
     this._userId = userId;
+    this._ownerId = data.owner._id;
   }
 
   _getTempalte() {
@@ -63,6 +64,7 @@ export class Card {
     this._cardImage.alt = this._name;
     this._cardLikes.textContent = this._likesCount;
     this._addLikes(this._userId);
+    this._removeDeleteButton(this._userId);
     return this._elementCard;
   }
   //Подсчитываем лайки при загрузке карточек
@@ -76,5 +78,12 @@ export class Card {
         this._elementCard.querySelector('.element__like-button').classList.add('element__like-button_acive');
       }
     });
+  }
+
+  //При наполнении проверяем нами ли создана и если нет, убираем кнопку удаления
+  _removeDeleteButton(userId) {
+    if (this._ownerId !== userId) {
+      this._elementCard.querySelector('.element__delete-button').style.display = 'none';
+    }
   }
 }
