@@ -1,4 +1,66 @@
 .profile__pic {
-    max-width: 120px;
-    border-radius: 50%;
+  width: 120px;
+  border-radius: 50%;
+  height: 120px;
+  object-fit: cover;
+  cursor: pointer;
+  /* transition: opacity 0.5s ease-in; */
 }
+
+.profile__pic:hover {
+  /* opacity: 0.2; */
+  /* background-image: url(../../../images/edit_button.svg);
+  background-size: 26px;
+  background-repeat: no-repeat;
+  background-position: center; */
+}
+
+.profile__pic:hover:after {
+  content: url('../../../images/edit_button.svg');
+}
+
+/* .profile__pic::after {
+  content: ' ';
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  background-color: white;
+  z-index: -1;
+  transition: opacity 1s ease-in;
+}
+
+.profile__pic:hover::after {
+  opacity: 0.2;
+} */
+
+/* .profile__pic::after {
+  opacity: 0.2;
+
+  /* z-index: 2;
+  background-image: url(../../../images/edit_button.svg);
+  background-size: 26px;
+  background-position: center;
+  background-repeat: no-repeat; */
+
+/* .profile__pic:hover::after {
+  opacity: 0.2;
+} */
+
+/* .profile__pic::after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #2a2c2f;
+  opacity: 0.3;
+  z-index: -1;
+  transition: opacity 1s ease-in;
+}
+
+.profile__pic:hover::after {
+  opacity: 0.8;
+} */

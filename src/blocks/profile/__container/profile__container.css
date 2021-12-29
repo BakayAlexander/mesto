@@ -1,18 +1,19 @@
 .profile__container {
-    display: flex;
-    align-items: center;
-    max-width: 70%;
+  display: flex;
+  align-items: center;
+  max-width: 70%;
+  position: relative;
 }
 
 @media screen and (max-width: 800px) {
-    .profile__container {
-        max-width: 60%;
-    } 
+  .profile__container {
+    max-width: 60%;
+  }
 }
 
 @media screen and (max-width: 605px) {
-    .profile__container {
-        max-width: 100%;
-        flex-direction: column;
-    } 
+  .profile__container {
+    max-width: 100%;
+    flex-direction: column;
+  }
 }

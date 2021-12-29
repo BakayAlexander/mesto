@@ -1,8 +1,8 @@
 .element__container {
-    width: 246px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin: 25px auto 31px auto;
+  width: 246px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 19px auto 22px auto;
 }
