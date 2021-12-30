@@ -147,6 +147,7 @@ function generateCard(data, template) {
             .deleteCard(data._id)
             .then(() => {
               card.handleDelete();
+              popupWithSubmitClass.close();
             })
             .catch((err) => {
               alert(`Возникла ошибка: ${err}`);

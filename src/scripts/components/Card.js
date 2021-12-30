@@ -60,18 +60,21 @@ export class Card {
 
   //Подсчитываем лайки при загрузке карточек
   countLikes = (currentLikes) => {
+    const likeButton = this._elementCard.querySelector('.element__like-button');
     this._cardLikes.textContent = currentLikes;
+    if (likeButton.classList.contains('element__like-button_acive')) {
+      likeButton.classList.remove('element__like-button_acive');
+    } else {
+      likeButton.classList.add('element__like-button_acive');
+    }
   };
 
   //Логика установки лайков. Затем передаем ее в слушатели событий.
   _handleLikeClick(evt) {
-    const likeButton = this._elementCard.querySelector('.element__like-button');
     if (evt.target.classList.contains('element__like-button_acive')) {
       this.handleLikeClickDeactive(this._id, this.countLikes);
-      likeButton.classList.remove('element__like-button_acive');
     } else {
       this.handleLikeClickActive(this._id, this.countLikes);
-      likeButton.classList.add('element__like-button_acive');
     }
   }
 
