@@ -15,6 +15,7 @@ export class Card {
     this.handleDeleteClick = handleDeleteClick;
     this._userId = userId;
     this._ownerId = data.owner._id;
+    this._id = data._id;
   }
 
   _getTempalte() {
@@ -24,15 +25,10 @@ export class Card {
 
   _setEventListeners() {
     const likeButton = this._elementCard.querySelector('.element__like-button');
-    likeButton.addEventListener('click', () => {
-      if (likeButton.classList.contains('element__like-button_acive')) {
-        likeButton.classList.remove('element__like-button_acive');
-        this.handleLikeClickDeactive();
-      } else {
-        likeButton.classList.add('element__like-button_acive');
-        this.handleLikeClickActive();
-      }
+    likeButton.addEventListener('click', (evt) => {
+      this._handleLikeClick(evt);
     });
+
     this._cardImage.addEventListener('click', () => {
       this.handleCardClick();
     });
@@ -44,6 +40,7 @@ export class Card {
 
   handleDelete() {
     this._elementCard.remove();
+    this._elementCard = '';
   }
 
   createCard() {
@@ -60,10 +57,24 @@ export class Card {
     this._removeDeleteButton(this._userId);
     return this._elementCard;
   }
+
   //Подсчитываем лайки при загрузке карточек
-  countLikes(currentLikes) {
+  countLikes = (currentLikes) => {
     this._cardLikes.textContent = currentLikes;
+  };
+
+  //Логика установки лайков. Затем передаем ее в слушатели событий.
+  _handleLikeClick(evt) {
+    const likeButton = this._elementCard.querySelector('.element__like-button');
+    if (evt.target.classList.contains('element__like-button_acive')) {
+      this.handleLikeClickDeactive(this._id, this.countLikes);
+      likeButton.classList.remove('element__like-button_acive');
+    } else {
+      this.handleLikeClickActive(this._id, this.countLikes);
+      likeButton.classList.add('element__like-button_acive');
+    }
   }
+
   //При наполнении карточками проверяем на каких стоит наш like
   _addLikes(userId) {
     this._likes.forEach((like) => {

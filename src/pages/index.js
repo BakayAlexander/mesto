@@ -54,17 +54,6 @@ const profileData = api.getProfileData();
 //Подгружаем из API данные карточки
 const cardsData = api.getCardsData();
 
-//Заполним профиль пользователя данными пришедшими из API
-profileData
-  .then((data) => {
-    userInfo.setUserInfo({ fullname: data.name, description: data.about, avatar: data.avatar });
-    //Записываем в переменную id пользователя (альтернативный метод)
-    // userId = data._id;
-  })
-  .catch((err) => {
-    alert(`Возникла ошибка: ${err}`);
-  });
-
 //Создаем новый класс для popup профиля
 const popupFormProfile = new PopupWithForm(popupSelectorProfile, (values) => {
   //Описываем что будет происходить при submit формы, это сабмитер/хендлер
@@ -75,6 +64,7 @@ const popupFormProfile = new PopupWithForm(popupSelectorProfile, (values) => {
     .editProfile(values.fullname, values.description)
     .then((res) => {
       userInfo.setUserInfo({ fullname: res.name, description: res.about, avatar: res.avatar });
+      popupFormProfile.close();
     })
     .catch((err) => {
       alert(`Возникла ошибка: ${err}`);
@@ -113,6 +103,29 @@ popupWithImageClass.setEventListeners();
 const popupWithSubmitClass = new PopupWithSubmit(popupCardDelete);
 popupWithSubmitClass.setEventListeners();
 
+//Через funtion expression описываем, что будет происходить при установке и снятии лайка, потом передадим эти функции колблэками при создании класса Card
+const handleLikeClickActive = (id, renderLikesCallback) => {
+  api
+    .putCardLikes(id)
+    .then((res) => {
+      renderLikesCallback(res.likes.length);
+    })
+    .catch((err) => {
+      alert(`Возникла ошибка: ${err}`);
+    });
+};
+
+const handleLikeClickDeactive = (id, renderLikesCallback) => {
+  api
+    .deleteCardLikes(id)
+    .then((res) => {
+      renderLikesCallback(res.likes.length);
+    })
+    .catch((err) => {
+      alert(`Возникла ошибка: ${err}`);
+    });
+};
+
 //Функция генерации карточки из класса Card
 function generateCard(data, template) {
   const card = new Card(
@@ -122,28 +135,9 @@ function generateCard(data, template) {
         //Описываем callback функцию для открытия popup с картинкой при клике на картинку
         popupWithImageClass.open(data);
       },
-      handleLikeClickActive: () => {
-        //Описываем callback функцию постановки лайков. Вначале отправляем API запрос на установку лайка, потом отправляем API запрос на пересчет лайков
-        api
-          .putCardLikes(data._id)
-          .then((res) => {
-            card.countLikes(res.likes.length);
-          })
-          .catch((err) => {
-            alert(`Возникла ошибка: ${err}`);
-          });
-      },
-      handleLikeClickDeactive: () => {
-        //Описываем callback функцию снятия лайков.
-        api
-          .deleteCardLikes(data._id)
-          .then((res) => {
-            card.countLikes(res.likes.length);
-          })
-          .catch((err) => {
-            alert(`Возникла ошибка: ${err}`);
-          });
-      },
+      //Передаем callback именнованные функции постановки и снятия лайка
+      handleLikeClickActive,
+      handleLikeClickDeactive,
       handleDeleteClick: () => {
         //Описываем callback функцию удаления карточки. Вначале открываем форму подтверджения удаления и затем динамически определяем, что будет происходить при ее submit.
         popupWithSubmitClass.open();
@@ -166,26 +160,35 @@ function generateCard(data, template) {
   return card.createCard();
 }
 
+//Создаем глобально чтобы обратиться к методу addItem при отрисовке из API и при добавлении пользователем
+const cardList = new Section(
+  {
+    renderer: (item) => {
+      //При создании карточки передаем не только массив данных и селектор шаблона, но и id пользователя ее создавшего
+      const card = generateCard(item, elementTemplate, userId);
+      cardList.addItem(card);
+    },
+  },
+  elementSection
+);
+
 //Записываем в переменную id пользователя (для того чтобы определить like на карточках и принадлежность карточек). Получаем id и только потом можем выгрузить карточки из API и отрисовать их на странице.
 Promise.all([cardsData, profileData]).then((res) => {
   userId = res[1]._id;
+  //Заполним профиль пользователя данными пришедшими из API
+  profileData
+    .then((data) => {
+      userInfo.setUserInfo({ fullname: data.name, description: data.about, avatar: data.avatar });
+    })
+    .catch((err) => {
+      alert(`Возникла ошибка: ${err}`);
+    });
   //Заполняем из API карточки
   cardsData
     .then((data) => {
-      const cardList = new Section(
-        {
-          items: data,
-          renderer: (item) => {
-            //При создании карточки передаем не только массив данных и селектор шаблона, но и id пользователя ее создавшего
-            const card = generateCard(item, elementTemplate, userId);
-            cardList.addItem(card);
-          },
-        },
-        elementSection
-      );
-
       //Запускаем дефолтное заполнение карточками.
-      cardList.renderItems();
+      cardList.renderItems(data);
+      return cardList;
     })
     .catch((err) => {
       alert(`Возникла ошибка: ${err}`);
@@ -205,7 +208,8 @@ const popupFormCardClass = new PopupWithForm(popupFormCard, (item) => {
     .addNewCard(item.name, item.link)
     .then((res) => {
       const card = generateCard(res, elementTemplate);
-      elementSection.append(card);
+      cardList.addItem(card);
+      popupFormCardClass.close();
     })
     .catch((err) => {
       alert(`Возникла ошибка: ${err}`);
@@ -237,6 +241,7 @@ const popupFormAvatarClass = new PopupWithForm(popupFormAvatar, (values) => {
     .editAvatar(values.link)
     .then((res) => {
       userInfo.setUserInfo({ fullname: res.name, description: res.about, avatar: res.avatar });
+      popupFormAvatarClass.close();
     })
     .catch((err) => {
       alert(`Возникла ошибка: ${err}`);
